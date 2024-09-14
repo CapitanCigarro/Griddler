@@ -1,3 +1,3 @@
 """
-Nonograma - cambio
+Nonog - cambio
 """
