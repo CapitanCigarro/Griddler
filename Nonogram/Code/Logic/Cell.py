@@ -9,8 +9,8 @@ class Cell:
     Attributes
     ----------
     
-    expectedState : CellStateEnum
-        Expected state for this cell
+    expectedState : int
+        Expected state for this cell, 0 for EMPTY, 1 for PAINTED
     
     currentState : CellStateEnum
         Current state of this cell (default CellStateEnum.EMPTY)
@@ -26,8 +26,8 @@ class Cell:
     expectedState : CellStateEnum
     currentState : CellStateEnum
     
-    def __init__(self, expectedState : CellStateEnum) -> None:
-        self.expectedState = expectedState
+    def __init__(self, expectedState : int) -> None:
+        self.expectedState = CellStateEnum(expectedState)
         self.currentState = CellStateEnum.EMPTY
         
     def setCurrentState(self, state : CellStateEnum) -> int:
