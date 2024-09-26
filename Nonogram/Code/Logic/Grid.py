@@ -13,13 +13,17 @@ class Grid:
         self.gridRows = len(grid) # How many rows
         self.gridColumns = len(grid[0]) # How many columns
         self.gridSize = self.gridRows * self.gridRows
-        self.__initializeLists()
+        self.cellsList = []
+        self.rowsList = []
+        self.columnsList = []
+        self.__initializeLists(grid)
         
         
     def __initializeLists(self, grid : list) -> None:
         rangeVar = self.gridRows if self.gridRows > self.gridColumns else self.gridColumns
         
-        rowsBool, columnsBool = True
+        rowsBool = True
+        columnsBool = True
         
         for i in range(rangeVar):
             rowList = []
@@ -72,4 +76,34 @@ class Grid:
             ret.append(aux)
         
         return ret
+    
+    def __str__(self) -> str:
+        a = """\nCells = 
+"""
+        b = """\nColumns = 
+"""
+        c = """\nRows = 
+"""
         
+        for i in range(len(self.cellsList)):
+            a += "["
+            for j in range(len(self.cellsList[i])):
+                if j != len(self.cellsList[i]) - 1:
+                    a += f"{str(self.cellsList[i][j])}, "
+                
+                else:
+                    a+= f"{str(self.cellsList[i][j])}"
+                
+            a +="]\n"
+            
+            if i < len(self.columnsList):
+                b += str(f"{self.columnsList[i]}\n")
+                
+            if i < len(self.rowsList):
+                c += str(f"{self.rowsList[i]}\n")
+        
+        return f"""
+                Columns = {self.gridColumns}
+                Rows = {self.gridRows}
+                Cells Amount = {self.gridSize}""" + a + b + c
+                

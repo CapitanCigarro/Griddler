@@ -68,6 +68,9 @@ class Cell:
         if self.expectedState in aux and state not in aux:
             return -1
         
+    def __str__(self) -> str:
+        return self.currentState.name    
+    
 # TODO delete this
 
 """ emptyCell = Cell(CellStateEnum.EMPTY)
