@@ -1,0 +1,9 @@
+sistema de puntos, al marcar o desmarcar celda, esta verificara el estado que esta con el que deberia de estar,
+si coinciden, se añade un punto a la puntuacion total, la cual debe de ser la cantidad total de celdas para ganar
+
+celda tendra una variable boolean que guarde si añadio o quito el punto, para evitar que al pasar de una x a un espacio en 
+blanco quite o añada otro punto extra, al añadir el punto por marcarse correctamente se reinicia (True), al marcar con 
+x o espacio en blanco se activa (False)
+
+metodo para cambiar estado en celda devuelve un numero, 1 si esta correcto el punto, -1 si estaba correcto y paso a incorrecto
+y 0 si paso de se mantuvo incorrecto
