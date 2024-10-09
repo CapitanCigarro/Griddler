@@ -107,6 +107,9 @@ class Grid:
                 Rows = {self.__gridRows}
                 Cells Amount = {self.__gridSize}""" + a + b + c
 
+    def getCell(self, row : int, column : int) -> Cell:
+        return self.__cellsList[row][column]
+
     def getGridSize(self) -> int:
         return self.__gridSize
     
