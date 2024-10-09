@@ -9,7 +9,7 @@ class Grid:
     rowsList : list
     columnsList : list
     
-    def __init__(self, grid : list) -> None:
+    def __init__(self, grid : list[list[int]]) -> None:
         self.gridRows = len(grid) # How many rows
         self.gridColumns = len(grid[0]) # How many columns
         self.gridSize = self.gridRows * self.gridRows
