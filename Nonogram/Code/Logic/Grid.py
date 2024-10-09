@@ -19,7 +19,7 @@ class Grid:
         self.__initializeLists(grid)
         
         
-    def __initializeLists(self, grid : list) -> None:
+    def __initializeLists(self, grid : list[list[int]]) -> None:
         rangeVar = self.gridRows if self.gridRows > self.gridColumns else self.gridColumns
         
         rowsBool = True
