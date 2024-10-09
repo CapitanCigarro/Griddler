@@ -9,3 +9,6 @@ class Level:
         self.__expectedGrid = expected
         self.__currentGrid = current
         __score = 0
+
+    def getScore(self) -> int:
+        return self.__score
