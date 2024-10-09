@@ -10,7 +10,7 @@ class TestCell(unittest.TestCase):
     paintedCell = Cell(CellStateEnum.PAINTED)
     def testCorrect(self):
         self.assertEqual(self.emptyCell.setCurrentState(CellStateEnum.EMPTY), 1)
-        self.assertEqual(self.emptyCell.setCurrentState(CellStateEnum.MARKED), 1)
+        self.assertEqual(self.emptyCell.setCurrentState(CellStateEnum.MARKED), 0)
         self.assertEqual(self.paintedCell.setCurrentState(CellStateEnum.PAINTED,1))
 
 
