@@ -1,3 +1,4 @@
+from typing import Any
 from CellStateEnum import CellStateEnum
 
 
@@ -9,7 +10,7 @@ class Cell:
     Attributes
     ----------
     
-    expectedState : int
+    __expectedState : int
         Expected state for this cell, 0 for EMPTY, 1 for PAINTED
     
     currentState : CellStateEnum
@@ -18,17 +19,17 @@ class Cell:
     Methods
     -------
     
-    setCurrentState(expectedState : CellStateEnum) -> int
+    setCurrentState(__expectedState : CellStateEnum) -> int
         sets and compares state of cell
     
     """
             
-    expectedState : CellStateEnum
-    currentState : CellStateEnum
+    __expectedState : CellStateEnum
+    __currentState : CellStateEnum
     
     def __init__(self, expectedState : int) -> None:
-        self.expectedState = CellStateEnum(expectedState)
-        self.currentState = CellStateEnum.EMPTY
+        self.__expectedState = CellStateEnum(expectedState)
+        self.__currentState = CellStateEnum.EMPTY
         
     def setCurrentState(self, state : CellStateEnum) -> int:
         """
@@ -47,29 +48,35 @@ class Cell:
         """
         
         aux = {CellStateEnum.EMPTY, CellStateEnum.MARKED}
-        if self.currentState in aux and state in aux:
-            self.currentState = state
+        if self.__currentState in aux and state in aux:
+            self.__currentState = state
             return 0
         
-        if self.currentState == state:
+        if self.__currentState == state:
             return 0
         
-        self.currentState = state
+        self.__currentState = state
         
-        if self.expectedState in aux and state in aux:
+        if self.__expectedState in aux and state in aux:
             return 1
         
-        if self.expectedState == CellStateEnum.PAINTED and state == CellStateEnum.PAINTED:
+        if self.__expectedState == CellStateEnum.PAINTED and state == CellStateEnum.PAINTED:
             return 1
         
-        if self.expectedState not in aux and state in aux:
+        if self.__expectedState not in aux and state in aux:
             return -1
         
-        if self.expectedState in aux and state not in aux:
+        if self.__expectedState in aux and state not in aux:
             return -1
         
     def __str__(self) -> str:
-        return self.currentState.name    
+        return self.__currentState.name    
+    
+    def getExpectedState(self) -> CellStateEnum:  
+        return self.__expectedState
+    
+    def CurrentState(self) -> CellStateEnum:
+        return self.__currentState
     
 # TODO delete this
 
