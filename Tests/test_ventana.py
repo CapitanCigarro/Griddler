@@ -1,7 +1,7 @@
 import unittest
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
 import pygame
-from Nonogram.Code.Visual.ventana import Aplicacion, Menu
+from Nonogram.Code.Visual.ventana import Aplicacion
 
 
 class TestAplicacion(unittest.TestCase):

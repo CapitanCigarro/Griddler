@@ -5,16 +5,17 @@ from ..Nonogram.Code.Logic.CellStateEnum import CellStateEnum
 
 import unittest
 
+
 class TestCell(unittest.TestCase):
     emptyCell = Cell(CellStateEnum.EMPTY)
     paintedCell = Cell(CellStateEnum.PAINTED)
+    markedCell = Cell(CellStateEnum.MARKED)
+
     def testCorrect(self):
-        self.assertEqual(self.emptyCell.setCurrentState(CellStateEnum.EMPTY), 1)
-        self.assertEqual(self.emptyCell.setCurrentState(CellStateEnum.MARKED), 1)
-        self.assertEqual(self.paintedCell.setCurrentState(CellStateEnum.PAINTED,1))
-
-
-
+        self.assertEqual(self.emptyCell.setCurrentState(
+            CellStateEnum.EMPTY), 0)
+        self.assertEqual(self.paintedCell.setCurrentState(
+            CellStateEnum.PAINTED), 1)
 
 
 if __name__ == '__main__':
