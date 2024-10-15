@@ -7,7 +7,7 @@ class Level:
 
     def __init__(self, expected : Grid) -> None:
         self.__currentGrid = expected
-        __score = 0
+        self.__score = 0
 
     def getScore(self) -> int:
         return self.__score
