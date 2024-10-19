@@ -1,7 +1,7 @@
 import pygame
 import sys
 from .menu import Menu
-
+from .jugar import Jugar
 
 pygame.init()
 
@@ -16,7 +16,7 @@ class Aplicacion:
     def __init__(self):
         # Aqui iran las distintas escenas
         self.menu = Menu(self)
-        # self.jugar = Jugar(self)
+        self.jugar = Jugar(self)
         # self.tutorial = Tutorial(self)
         # self.opciones = Opciones(self)
         self.panel_actual = self.menu
