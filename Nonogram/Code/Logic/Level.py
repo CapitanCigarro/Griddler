@@ -19,14 +19,12 @@ class Level:
     def changeCell(self, i : int, j : int, state : CellStateEnum) -> None:
         self.__score = self.__currentGrid.getCell(i, j).setCurrentState(state)
 
-    def useClue(self) -> None:
+    def useClue(self, i : int, j : int) -> None:
         if self.__remainingClues > 0:
-            ran_i = randint(0, self.__currentGrid.getGridRows() - 1)
-            ran_j = randint(0, self.__currentGrid.getGridColumns() - 1)
-            clue_cell = self.__currentGrid.getCell(ran_i, ran_j)
-
-            if clue_cell.getExpectedState() == CellStateEnum.PAINTED:
-                clue_cell.setCurrentState(CellStateEnum.PAINTED)
-            else:
-                clue_cell.setCurrentState(CellStateEnum.MARKED)
-            self.__remainingClues -= 1
+            clue_cell = self.__currentGrid.getCell(i, j)
+            if not clue_cell.isSolved():
+                if clue_cell.getExpectedState() == CellStateEnum.PAINTED:
+                    clue_cell.setCurrentState(CellStateEnum.PAINTED)
+                else:
+                    clue_cell.setCurrentState(CellStateEnum.MARKED)
+                self.__remainingClues -= 1
