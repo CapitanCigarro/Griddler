@@ -2,6 +2,7 @@ import pygame
 import sys
 from .menu import Menu
 from .jugar import Jugar
+from .elegirTamaño import elegirTamaño
 
 pygame.init()
 
@@ -17,6 +18,7 @@ class Aplicacion:
         # Aqui iran las distintas escenas
         self.menu = Menu(self)
         self.jugar = Jugar(self)
+        self.elegirTamaño = elegirTamaño(self)
         # self.tutorial = Tutorial(self)
         # self.opciones = Opciones(self)
         self.panel_actual = self.menu
