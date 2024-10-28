@@ -1,17 +1,24 @@
 import pygame
-from Griddler.Nonogram.Code.Logic import Nonogram
-from Griddler.Nonogram.Code.Logic import Cell
-from Griddler.Nonogram.Code.Logic import CellStateEnum
+from Griddler.Nonogram.Code.Logic.Nonogram import Nonogram
+from Griddler.Nonogram.Code.Logic.Grid import Grid
+from Griddler.Nonogram.Code.Logic.Cell import CellStateEnum
+from .boton import Boton
 
 
 class Jugar:
     def __init__(self, app):
         self.app = app
-        self.nonograma = Nonogram(10, 10)  # Ejemplo de un nonograma de 10x10
+        # Crear una lista bidimensional y pasarla a Grid
+        grid_data = [[0] * 10 for _ in range(10)]
+        grid = Grid(grid_data)  # Crear un objeto Grid
+        self.nonograma = Nonogram(grid)  # Pasar el Grid a Nonogram
+        self.cell_size = 30  # Tamaño de cada celda en píxeles
         self.botones = [
-            Boton("Retroceder", (50, 50), (200, 50),
-                  ((80, 80, 80), (255, 255, 255)), self.ir_a_menu)
         ]
+
+    # Resto de tu código ...
+
+    # Resto de tu código ...
 
     def ir_a_menu(self):
         self.app.cambiar_panel(self.app.menu)
@@ -23,35 +30,44 @@ class Jugar:
         elif evento.type == pygame.MOUSEBUTTONDOWN:
             for boton in self.botones:
                 boton.manejar_evento(evento)
-            # Manejar clics en el nonograma
+            # Detectar clic en el nonograma
             pos = pygame.mouse.get_pos()
-            self.nonograma.manejar_clic(pos)
+            self.manejar_clic(pos)
+
+    def manejar_clic(self, pos):
+        """
+        Cambia el estado de una celda cuando se hace clic.
+
+        Parameters
+        ----------
+        pos : tuple
+            Posición del clic en la ventana.
+        """
+        x, y = pos
+        col = x // self.cell_size
+        row = y // self.cell_size
+
+        # Verifica que el clic esté dentro de los límites del nonograma
+        if 0 <= row < self.nonograma.grid.gridRows and 0 <= col < self.nonograma.grid.gridColumns:
+            # Cambia el estado de la celda en el modelo lógico
+            current_cell = self.nonograma.grid.cellsList[row][col]
+            new_state = CellStateEnum.PAINTED if current_cell.currentState == CellStateEnum.EMPTY else CellStateEnum.EMPTY
+            current_cell.setCurrentState(new_state)
 
     def dibujar(self, ventana):
         ventana.fill((255, 255, 255))
+
+        # Dibuja los botones
         for boton in self.botones:
             boton.dibujar(ventana)
-        self.nonograma.dibujar(ventana)
 
-
-class Boton:
-    def __init__(self, texto, pos, tamano, colores, accion):
-        self.texto = texto
-        self.pos = pos
-        self.tamano = tamano
-        self.colores = colores
-        self.accion = accion
-        self.rect = pygame.Rect(pos, tamano)
-        self.fuente = pygame.font.Font(None, 36)
-
-    def manejar_evento(self, evento):
-        if evento.type == pygame.MOUSEBUTTONDOWN:
-            if self.rect.collidepoint(evento.pos):
-                self.accion()
-
-    def dibujar(self, ventana):
-        color_fondo = self.colores[0]
-        color_texto = self.colores[1]
-        pygame.draw.rect(ventana, color_fondo, self.rect)
-        texto_superficie = self.fuente.render(self.texto, True, color_texto)
-        ventana.blit(texto_superficie, self.rect.topleft)
+        # Dibuja el nonograma
+        for row_idx, row in enumerate(self.nonograma.grid.cellsList):
+            for col_idx, cell in enumerate(row):
+                color = (255, 255, 255) if cell.currentState == CellStateEnum.EMPTY else (
+                    0, 0, 0)
+                rect = pygame.Rect(col_idx * self.cell_size, row_idx *
+                                   self.cell_size, self.cell_size, self.cell_size)
+                pygame.draw.rect(ventana, color, rect)
+                pygame.draw.rect(ventana, (200, 200, 200),
+                                 rect, 1)  # Bordes de las celdas

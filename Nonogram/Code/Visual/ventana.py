@@ -7,9 +7,9 @@ from .elegirTamaño import elegirTamaño
 pygame.init()
 
 ANCHO_VENTANA = 800
-ALTO_VENTANA = 600
+ALTO_VENTANA = 800
 
-ventana = pygame.display.set_mode((ANCHO_VENTANA, ANCHO_VENTANA))
+ventana = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
 pygame.display.set_caption("Nonograma")
 
 
@@ -19,8 +19,6 @@ class Aplicacion:
         self.menu = Menu(self)
         self.jugar = Jugar(self)
         self.elegirTamaño = elegirTamaño(self)
-        # self.tutorial = Tutorial(self)
-        # self.opciones = Opciones(self)
         self.panel_actual = self.menu
 
     def cambiar_panel(self, nuevo_panel):
