@@ -9,13 +9,14 @@ import unittest
 class TestCell(unittest.TestCase):
     emptyCell = Cell(CellStateEnum.EMPTY)
     paintedCell = Cell(CellStateEnum.PAINTED)
-    markedCell = Cell(CellStateEnum.MARKED)
 
     def testCorrect(self):
         self.assertEqual(self.emptyCell.setCurrentState(
-            CellStateEnum.EMPTY), 0)
+            CellStateEnum.EMPTY), 1)
+        self.assertEqual(self.emptyCell.setCurrentState(
+            CellStateEnum.MARKED), 1)
         self.assertEqual(self.paintedCell.setCurrentState(
-            CellStateEnum.PAINTED), 1)
+            CellStateEnum.PAINTED, 1))
 
 
 if __name__ == '__main__':

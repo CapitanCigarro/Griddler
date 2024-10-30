@@ -1,14 +1,16 @@
+from typing import Any
 from .CellStateEnum import CellStateEnum
 
 
 class Cell:
+
     """
     Logic Cell class
 
     Attributes
     ----------
 
-    expectedState : int
+    __expectedState : int
         Expected state for this cell, 0 for EMPTY, 1 for PAINTED
 
     currentState : CellStateEnum
@@ -17,17 +19,22 @@ class Cell:
     Methods
     -------
 
-    setCurrentState(expectedState : CellStateEnum) -> int
+    setCurrentState(__expectedState : CellStateEnum) -> int
         sets and compares state of cell
 
     """
 
-    expectedState: CellStateEnum
-    currentState: CellStateEnum
+    __expectedState: CellStateEnum
+    __currentState: CellStateEnum
+    __solved: bool
 
     def __init__(self, expectedState: int) -> None:
-        self.expectedState = CellStateEnum(expectedState)
-        self.currentState = CellStateEnum.EMPTY
+        self.__expectedState = CellStateEnum(expectedState)
+        self.__currentState = CellStateEnum.EMPTY
+        if self.__expectedState == CellStateEnum.EMPTY:
+            self.__solved = True
+        else:
+            self.__solved = False
 
     def setCurrentState(self, state: CellStateEnum) -> int:
         """
@@ -46,26 +53,46 @@ class Cell:
         """
 
         aux = {CellStateEnum.EMPTY, CellStateEnum.MARKED}
-        if self.currentState in aux and state in aux:
-            self.currentState = state
+        if state in aux and self.__expectedState == CellStateEnum.EMPTY and self.__solved:
+            self.__currentState = state
+            return 0
+        elif state == self.__expectedState and self.__solved:
+            self.__currentState = state
+            return 0
+        elif state in aux and self.__expectedState == CellStateEnum.EMPTY and not self.__solved:
+            self.__solved = True
+            self.__currentState = state
+            return 1
+        elif state == self.__expectedState and not self.__solved:
+            self.__solved = True
+            self.__currentState = state
+            return 1
+        elif state not in aux and self.__expectedState == CellStateEnum.EMPTY and self.__solved:
+            self.__solved = False
+            self.__currentState = state
+            return -1
+        elif state != self.__expectedState and self.__solved:
+            self.__solved = False
+            self.__currentState = state
+            return -1
+        elif state != self.__expectedState and not self.__solved:
+            self.__currentState = state
+            return 0
+        elif state not in aux and self.__expectedState == CellStateEnum.EMPTY and not self.__solved:
+            self.__currentState = state
             return 0
 
-        if self.currentState == state:
-            return 0
+    def __str__(self) -> str:
+        return self.__currentState.name
 
-        self.currentState = state
+    def getExpectedState(self) -> CellStateEnum:
+        return self.__expectedState
 
-        if self.expectedState in aux and state in aux:
-            return 1
+    def CurrentState(self) -> CellStateEnum:
+        return self.__currentState
 
-        if self.expectedState == CellStateEnum.PAINTED and state == CellStateEnum.PAINTED:
-            return 1
-
-        if self.expectedState not in aux and state in aux:
-            return -1
-
-        if self.expectedState in aux and state not in aux:
-            return -1
+    def isSolved(self) -> bool:
+        return self.__solved
 
 # TODO delete this
 
