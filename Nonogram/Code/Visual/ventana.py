@@ -1,8 +1,8 @@
 import pygame
 import sys
-from Nonogram.Code.Visual.menu import Menu
-from Nonogram.Code.Visual.jugar import Jugar
-from Nonogram.Code.Visual.elegirTamaño import elegirTamaño
+from Code.Visual.menu import Menu
+from Code.Visual.jugar import Jugar
+from Code.Visual.elegirTamaño import elegirTamaño
 
 pygame.init()
 

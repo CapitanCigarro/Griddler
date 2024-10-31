@@ -1,7 +1,7 @@
 import pygame
-from Nonogram.Code.Logic.Grid import Grid
-from Nonogram.Code.Logic.Cell import CellStateEnum
-from Nonogram.Code.Logic.Level import Level
+from Code.Logic.Grid import Grid
+from Code.Logic.Cell import CellStateEnum
+from Code.Logic.Level import Level
 
 class Jugar:
     def __init__(self, app,grid:Grid):

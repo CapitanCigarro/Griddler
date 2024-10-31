@@ -1,8 +1,8 @@
 # from .Cell import CellStateEnum
 # from .Cell import Cell
-from Nonogram.Code.Logic.Level import Level
-from Nonogram.Code.Logic.LectorNiveles import LectorNiveles
-from Nonogram.Code.Logic.Grid import Grid
+from Code.Logic.Level import Level
+from Code.Logic.LectorNiveles import LectorNiveles
+from Code.Logic.Grid import Grid
 
 class Nonogram:
     __nivelActual: Level

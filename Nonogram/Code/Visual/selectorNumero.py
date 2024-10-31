@@ -1,7 +1,6 @@
 import pygame
-from pygame.display import update
 
-from Nonogram.Code.Visual.boton import Boton
+from Code.Visual.boton import Boton
 
 class Selector:
     __pos = (0,0)
