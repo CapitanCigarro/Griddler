@@ -1,4 +1,4 @@
-from .Cell import Cell
+from Nonogram.Code.Logic.Cell import Cell
 
 
 class Grid:

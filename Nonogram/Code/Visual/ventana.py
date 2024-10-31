@@ -1,8 +1,8 @@
 import pygame
 import sys
-from .menu import Menu
-from .jugar import Jugar
-from .elegirTamaño import elegirTamaño
+from Nonogram.Code.Visual.menu import Menu
+from Nonogram.Code.Visual.jugar import Jugar
+from Nonogram.Code.Visual.elegirTamaño import elegirTamaño
 
 pygame.init()
 
@@ -17,7 +17,7 @@ class Aplicacion:
     def __init__(self):
         # Aqui iran las distintas escenas
         self.menu = Menu(self)
-        self.jugar = Jugar(self)
+        self.jugar : Jugar
         self.elegirTamaño = elegirTamaño(self)
         self.panel_actual = self.menu
 
@@ -34,7 +34,6 @@ class Aplicacion:
 
             self.panel_actual.dibujar(ventana)
             pygame.display.flip()
-
 
 if __name__ == "__main__":
     app = Aplicacion()

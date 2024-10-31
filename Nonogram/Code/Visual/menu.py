@@ -1,6 +1,6 @@
 import pygame
-from .boton import Boton
-from .panel import Panel
+from Nonogram.Code.Visual.boton import Boton
+from Nonogram.Code.Visual.panel import Panel
 from .jugar import Jugar
 
 

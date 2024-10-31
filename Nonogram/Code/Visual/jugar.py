@@ -1,18 +1,13 @@
 import pygame
-from Griddler.Nonogram.Code.Logic.Nonogram import Nonogram
-from Griddler.Nonogram.Code.Logic.Grid import Grid
-from Griddler.Nonogram.Code.Logic.Cell import CellStateEnum
-from Griddler.Nonogram.Code.Logic.Level import Level
-from .boton import Boton
-from Griddler.Nonogram.SavedNonograms.NonogramsEnum import NonogramsEnum
-
+from Nonogram.Code.Logic.Grid import Grid
+from Nonogram.Code.Logic.Cell import CellStateEnum
+from Nonogram.Code.Logic.Level import Level
 
 class Jugar:
-    def __init__(self, app):
+    def __init__(self, app,grid:Grid):
         self.app = app
         # Crear un objeto Grid usando la propiedad grid del enum
-        self.grid = Grid(NonogramsEnum.KITCHENFLOOR.value)
-        # self.nonograma = Nonogram(self.grid)  # Pasar el Grid a Nonogram
+        self.grid = grid
         self.levelnonograma = Level(self.grid)
         self.cell_size = 75  # Tamaño de cada celda en píxeles
         self.start_x = 100
