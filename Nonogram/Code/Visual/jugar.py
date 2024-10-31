@@ -102,7 +102,7 @@ class Jugar:
             for num_idx, num in enumerate(row):
                 text_surface = font.render(str(num), True, (0, 0, 0))
                 text_rect = text_surface.get_rect()
-                text_rect.right = self.start_x - 5 - num_idx * 20
+                text_rect.right = self.start_x - 10 - num_idx * 20
                 text_rect.centery = self.start_y + row_idx * \
                     self.cell_size + self.cell_size // 2
                 ventana.blit(text_surface, text_rect)
@@ -114,7 +114,7 @@ class Jugar:
                 text_rect = text_surface.get_rect()
                 text_rect.centerx = self.start_x + col_idx * \
                     self.cell_size + self.cell_size // 2
-                text_rect.bottom = self.start_y - 5 - num_idx * 20
+                text_rect.bottom = self.start_y + 10 - (len(col)-num_idx) * 20
                 ventana.blit(text_surface, text_rect)
 
         # Dibuja el nonograma
