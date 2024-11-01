@@ -1,28 +1,30 @@
 import pygame
-from Code.Logic.Grid import Grid
-from Code.Logic.Cell import CellStateEnum
-from Code.Logic.Level import Level
+from ..Logic.Grid import Grid
+from ..Logic.Cell import CellStateEnum
+from ..Logic.Level import Level
+
 
 class Jugar:
-    def __init__(self, app,grid:Grid):
+    def __init__(self, app, grid: Grid):
         self.app = app
-        # Crear un objeto Grid usando la propiedad grid del enum
         self.grid = grid
         self.levelnonograma = Level(self.grid)
-        self.cell_size = 75  # Tamaño de cada celda en píxeles
+        self.max_area_size = 500
+        self.cell_size = self.calcular_tamano_celdas()
         self.start_x = 100
         self.start_y = 100
         self.botones = []
         self.ventana_nonograma_emergente = False
         self.nonograma_completado = False
+       # grid.printLists()
+
+    def calcular_tamano_celdas(self):
+        rows = self.grid.getGridRows()
+        cols = self.grid.getGridColumns()
+        return min(self.max_area_size // rows, self.max_area_size // cols)
 
     def ir_a_menu(self):
-        # self.reiniciar_nonograma()
         self.app.cambiar_panel(self.app.menu)
-
-    # def reiniciar_nonograma(self):
-    #     self.grid = Grid(NonogramsEnum.KITCHENFLOOR.value)
-    #     self.nonograma = Level(self.grid)
 
     def manejar_evento(self, evento):
         if evento.type == pygame.KEYDOWN:
@@ -40,29 +42,29 @@ class Jugar:
             col = (x - self.start_x) // self.cell_size
             row = (y - self.start_y) // self.cell_size
 
-            # Verifica que el clic esté dentro de los límites del nonograma
             if 0 <= row < self.grid.getGridRows() and 0 <= col < self.grid.getGridColumns():
-                # Determina qué tipo de clic se realizó
                 if pygame.mouse.get_pressed()[0]:
-                    if self.levelnonograma.getCurrentGrid().getCell(row, col).CurrentState() == CellStateEnum.EMPTY:
+                    if self.levelnonograma.getCurrentGrid().getCell(row, col).CurrentState() == CellStateEnum.MARKED or CellStateEnum.EMPTY:
                         self.levelnonograma.changeCell(
                             row, col, CellStateEnum.PAINTED)
                     elif self.levelnonograma.getCurrentGrid().getCell(row, col).CurrentState() == CellStateEnum.PAINTED:
                         self.levelnonograma.changeCell(
                             row, col, CellStateEnum.EMPTY)
-                elif pygame.mouse.get_pressed()[2]:  # Clic derecho
-                    self.levelnonograma.changeCell(
-                        row, col, CellStateEnum.MARKED)
+                elif pygame.mouse.get_pressed()[2]:
+                    if self.levelnonograma.getCurrentGrid().getCell(row, col).CurrentState() == CellStateEnum.EMPTY:
+                        self.levelnonograma.changeCell(
+                            row, col, CellStateEnum.MARKED)
+                    elif self.levelnonograma.getCurrentGrid().getCell(row, col).CurrentState() == CellStateEnum.MARKED or CellStateEnum.EMPTY:
+                        self.levelnonograma.changeCell(
+                            row, col, CellStateEnum.EMPTY)
 
-                # Verifica si se completó el nonograma
                 if self.levelnonograma.getScore() == (self.grid.getGridRows() * self.grid.getGridColumns()):
                     print("¡Felicidades! Has completado el nonograma.")
                     self.ventana_nonograma_emergente = True
                     self.nonograma_completado = True
 
     def mostrar_ventana_emergente(self):
-        # Ajusta el tamaño de la ventana emergente
-        ancho_ventana = 600  # Aumenta el ancho de la ventana
+        ancho_ventana = 600
         alto_ventana = 150
         ventana_emergente = pygame.Surface((ancho_ventana, alto_ventana))
         ventana_emergente.fill((255, 255, 255))
@@ -83,7 +85,6 @@ class Jugar:
         ) // 2 - ancho_ventana // 2, self.ventana.get_height() // 2 - alto_ventana // 2))
         pygame.display.flip()
 
-        # Espera a que el usuario presione una tecla o haga clic para cerrar la ventana emergente
         esperando = True
         while esperando:
             for evento in pygame.event.get():
@@ -94,10 +95,8 @@ class Jugar:
         self.ventana = ventana
         ventana.fill((255, 255, 255))
 
-        # Fuente para los números
         font = pygame.font.Font(None, 24)
 
-        # Dibuja las guías de filas en el margen izquierdo
         for row_idx, row in enumerate(self.grid.getRowsList()):
             for num_idx, num in enumerate(row):
                 text_surface = font.render(str(num), True, (0, 0, 0))
@@ -107,7 +106,6 @@ class Jugar:
                     self.cell_size + self.cell_size // 2
                 ventana.blit(text_surface, text_rect)
 
-        # Dibuja las guías de columnas en el margen superior
         for col_idx, col in enumerate(self.grid.getColumnsList()):
             for num_idx, num in enumerate(col):
                 text_surface = font.render(str(num), True, (0, 0, 0))
@@ -117,32 +115,27 @@ class Jugar:
                 text_rect.bottom = self.start_y + 10 - (len(col)-num_idx) * 20
                 ventana.blit(text_surface, text_rect)
 
-        # Dibuja el nonograma
         for row_idx, row in enumerate(self.grid.getCellsList()):
             for col_idx, cell in enumerate(row):
                 if cell.CurrentState() == CellStateEnum.MARKED:
-                    # Dibuja una "X"
-                    color = (255, 0, 0)  # Color rojo para la "X"
-                    rect = pygame.Rect(self.start_x + col_idx * self.cell_size, self.start_y + row_idx *
-                                       self.cell_size, self.cell_size, self.cell_size)
-                    pygame.draw.line(ventana, color, rect.topleft,
-                                     rect.bottomright, 2)
+                    color = (255, 0, 0)
+                    rect = pygame.Rect(self.start_x + col_idx * self.cell_size, self.start_y +
+                                       row_idx * self.cell_size, self.cell_size, self.cell_size)
+                    pygame.draw.line(
+                        ventana, color, rect.topleft, rect.bottomright, 2)
                     pygame.draw.line(
                         ventana, color, rect.bottomleft, rect.topright, 2)
                 else:
-                    # Color para celdas vacías y pintadas
                     color = (255, 255, 255) if cell.CurrentState(
                     ) == CellStateEnum.EMPTY else (0, 0, 0)
-                    rect = pygame.Rect(self.start_x + col_idx * self.cell_size, self.start_y + row_idx *
-                                       self.cell_size, self.cell_size, self.cell_size)
+                    rect = pygame.Rect(self.start_x + col_idx * self.cell_size, self.start_y +
+                                       row_idx * self.cell_size, self.cell_size, self.cell_size)
                     pygame.draw.rect(ventana, color, rect)
-                    pygame.draw.rect(ventana, (200, 200, 200),
-                                     rect, 1)  # Bordes de las celdas
-        # Dibuja los botones
+                    pygame.draw.rect(ventana, (200, 200, 200), rect, 1)
+
         for boton in self.botones:
             boton.dibujar(ventana)
 
-        # Si el nonograma está completado, muestra la ventana emergente
         if self.ventana_nonograma_emergente:
             self.mostrar_ventana_emergente()
 

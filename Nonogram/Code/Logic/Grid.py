@@ -1,4 +1,4 @@
-from Code.Logic.Cell import Cell
+from ..Logic.Cell import Cell
 
 
 class Grid:
@@ -18,6 +18,7 @@ class Grid:
         self.__rowsList = []
         self.__columnsList = []
         self.__initializeLists(grid)
+        self.printLists()
 
     def __initializeLists(self, grid: list[list[int]]) -> None:
         rangeVar = self.__gridRows if self.__gridRows > self.__gridColumns else self.__gridColumns
@@ -75,6 +76,10 @@ class Grid:
             ret.append(aux)
 
         return ret
+
+    def printLists(self) -> None:
+        print("Rows List:", self.__rowsList)
+        print("Columns List:", self.__columnsList)
 
     def __str__(self) -> str:
         a = """\nCells = 
