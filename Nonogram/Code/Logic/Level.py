@@ -1,5 +1,7 @@
 from Grid import Grid
-from  CellStateEnum import CellStateEnum
+from CellStateEnum import CellStateEnum
+from NoCluesRemainingException import NoCluesRemainingException
+
 
 class Level:
     __currentGrid : Grid
@@ -31,3 +33,5 @@ class Level:
                 else:
                     self.__score += clue_cell.setCurrentState(CellStateEnum.MARKED)
                 self.__remainingClues -= 1
+        else:
+            raise NoCluesRemainingException("No quedan pistas para usar")
