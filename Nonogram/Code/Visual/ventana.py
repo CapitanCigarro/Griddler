@@ -3,6 +3,8 @@ import sys
 from .menu import Menu
 from .jugar import Jugar
 from .elegirTamaño import elegirTamaño
+from .opciones import Opciones
+from .tutorial import Tutorial
 
 pygame.init()
 
@@ -19,6 +21,8 @@ class Aplicacion:
         self.menu = Menu(self)
         self.jugar: Jugar
         self.elegirTamaño = elegirTamaño(self)
+        self.opciones = Opciones(self)
+        self.tutorial = Tutorial(self)
         self.panel_actual = self.menu
 
     def cambiar_panel(self, nuevo_panel):
@@ -30,6 +34,8 @@ class Aplicacion:
                 if evento.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+                elif evento.type == pygame.K_F11:
+                    self.ventana = pygame.display.set_mode((self.ancho, self.alto), pygame.FULLSCREEN )
                 self.panel_actual.manejar_evento(evento)
 
             self.panel_actual.dibujar(ventana)

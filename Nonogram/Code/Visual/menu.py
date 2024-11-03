@@ -1,7 +1,6 @@
 import pygame
 from .boton import Boton
 from .panel import Panel
-from .jugar import Jugar
 
 
 class Menu(Panel):
