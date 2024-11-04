@@ -1,69 +1,58 @@
 import pygame
-
 from .panel import Panel
 from .boton import Boton
+from .selectorNumero import Selector
 
 class Opciones(Panel):
-    def __init__(self, app):
+    def __init__(self, app,ventana):
         super().__init__()
+        self.ventana=ventana
         self.app = app
         pygame.font.init()
         self.fuente = pygame.font.Font(None, 74)
-        ancho=800
-        alto=800
+        self.pantalla_completa = False
+
         self.botones = [
-            Boton("Pantalla completa", (300, 350), (200, 50),
-                  ((80, 80, 80), (255, 255, 255)), print(0)),
-            Boton("Tutorial", (300, 450), (200, 50),
-                  ((80, 80, 80), (255, 255, 255)), print(0)),
-            Boton("Opciones", (300, 550), (200, 50),
-                  ((80, 80, 80), (255, 255, 255)), print(0))
+            Boton("Pantalla completa", (300, 250), (200, 50), ((80, 80, 80), (255, 255, 255)), self.toggle_fullscreen),
+            Boton("Aplicar Resolución", (300, 350), (200, 50), ((80, 80, 80), (255, 255, 255)), self.aplicar_resolucion)
         ]
+        self.resoluciones = [(800, 600), (1024, 768), (1280, 720), (1920, 1080)]
+        self.resolucion_selector = Selector(650, 350, len(self.resoluciones) - 1)
 
     def manejar_evento(self, evento):
+        self.resolucion_selector.manejar_evento(evento)
         if evento.type == pygame.KEYDOWN:
             if evento.key == pygame.K_ESCAPE: 
                 self.app.cambiar_panel(self.app.menu)
-
+        # Llama a los eventos de los botones
+        for boton in self.botones:
+            boton.manejar_evento(evento)
 
     def dibujar(self, ventana):
         ventana.fill((80, 80, 80)) 
-        texto = self.fuente.render("Buena suerte", True, (255, 255, 255))
+        texto = self.fuente.render("Opciones", True, (255, 255, 255))
         ventana.blit(texto, (220, 30))
+
+        self.resolucion_selector.dibujar(ventana)
+        # Dibuja los botones
         for boton in self.botones:
             boton.dibujar(ventana)
-        
 
-    def ir_a_menu(self):
-        self.app.cambiar_panel(self.app.menu)
+        resolucion_actual = self.resoluciones[self.resolucion_selector.getvalor()]
+        texto_resolucion = self.fuente.render(f"Resolución: {resolucion_actual[0]} x {resolucion_actual[1]}", True, (255, 255, 255))
+        ventana.blit(texto_resolucion, (100, 300))
 
-    def cambiar_resolucion(self, ancho, alto):
-        """Cambia la resolución de la ventana del juego."""
-        self.ancho, self.alto = ancho, alto
-        self.ventana = pygame.display.set_mode((self.ancho, self.alto), pygame.FULLSCREEN if self.pantalla_completa else 0)
-        print(f"Resolución cambiada a: {self.ancho}x{self.alto}")
-
-    def cambiar_volumen(self, nuevo_volumen):
-        """Ajusta el volumen de la música."""
-        self.volumen = max(0.0, min(1.0, nuevo_volumen))  # Asegura que el volumen esté entre 0 y 1
-        pygame.mixer.music.set_volume(self.volumen)
-        print(f"Volumen cambiado a: {self.volumen}")
-
-    def iniciar_musica(self, ruta_musica):
-        """Inicia la reproducción de la música."""
-        pygame.mixer.music.load(ruta_musica)
-        pygame.mixer.music.play(-1)  # Repetición indefinida
-
-    def pausar_reanudar_musica(self):
-        """Pausa o reanuda la música según su estado actual."""
-        if pygame.mixer.music.get_busy():
-            pygame.mixer.music.pause()
-            print("Música pausada")
+    def toggle_fullscreen(self):
+        if self.pantalla_completa:
+            # Cambiar a modo ventana
+            self.ventana = pygame.display.set_mode((800, 800))  # O cualquier resolución que desees
+            self.pantalla_completa = False
         else:
-            pygame.mixer.music.unpause()
-            print("Música reanudada")
+            # Cambiar a pantalla completa
+            self.ventana = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+            self.pantalla_completa = True
 
-    def detener_musica(self):
-        """Detiene la música."""
-        pygame.mixer.music.stop()
-        print("Música detenida")
+    def aplicar_resolucion(self):
+        nueva_resolucion = self.resoluciones[self.resolucion_selector.getvalor()]
+        
+        pygame.display.set_mode((nueva_resolucion[0], nueva_resolucion[1]))
