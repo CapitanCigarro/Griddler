@@ -21,4 +21,4 @@ class Boton:
     def manejar_evento(self, evento):
         if evento.type == pygame.MOUSEBUTTONDOWN and evento.button == 1:
             if self.rect.collidepoint(evento.pos):
-                self.accion()
+                self.accion()        
