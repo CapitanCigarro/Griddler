@@ -35,8 +35,8 @@ class LectorNiveles:
             return self.levels[n+1]
 
     def gettotalniveles(self) -> int:
-        # se elimina 2 por len() no cuenta cero además de que [0] nunca será nivel
-        return len(self.levels) - 2
+        # se elimina 1 por len(), ya que [0] nunca será nivel
+        return len(self.levels) - 1
 
     def getsizeniveles(self) -> int:
         if len(self.levels) > 1:

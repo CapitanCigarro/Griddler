@@ -1,6 +1,6 @@
 import pygame
 
-from Code.Visual.jugar import Jugar
+from .jugar import Jugar
 
 from .levelButton import LevelButton
 
@@ -29,9 +29,10 @@ class ChooseNonogram(Panel):
         self.font = pygame.font.Font(None, 74)
         self.size = size
         self.levelsButtons = []
+        print(levels)
         for i in range(levels):
             action = app.cambiar_panel
-            relatedNonogram = Jugar(self.app, nonogram.getgridActual(grid, i + 1))
+            relatedNonogram = Jugar(self.app, nonogram.getgridActual(grid, i))
             level = LevelButton(str(i + 1), (20 + i * 50 + i * 10, 20 + (i // 10) * 50 + (i // 10) * 10),
                                 (50, 50), ((80, 80, 80), (255, 255, 255)), action, relatedNonogram, app)
             self.levelsButtons.append(level)
