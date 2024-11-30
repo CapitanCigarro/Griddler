@@ -25,6 +25,9 @@ class Level:
     def changeCell(self, i: int, j: int, state: CellStateEnum) -> None:
         self.__score += self.__currentGrid.getCell(i, j).setCurrentState(state)
 
+    def getRemainingClues(self) -> int:
+        return self.__remainingClues
+
     def useClue(self, i: int, j: int) -> None:
         if self.__remainingClues > 0:
             clue_cell = self.__currentGrid.getCell(i, j)
