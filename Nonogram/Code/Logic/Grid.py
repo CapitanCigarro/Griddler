@@ -20,7 +20,7 @@ class Grid:
         self.__columnsList = []
         self.__initializeLists(grid)
 
-        #self.printLists()
+        # self.printLists()
 
     def __initializeLists(self, grid: list[list[int]]) -> None:
         rangeVar = self.__gridRows if self.__gridRows > self.__gridColumns else self.__gridColumns
@@ -83,29 +83,15 @@ class Grid:
         print("Rows List:", self.__rowsList)
         print("Columns List:", self.__columnsList)
 
-
         for i in range(len(self.__cellsList)):
-            a += "["
+            a = "["  # Inicializa la variable 'a'
             for j in range(len(self.__cellsList[i])):
                 if j != len(self.__cellsList[i]) - 1:
                     a += f"{str(self.__cellsList[i][j])}, "
-
                 else:
                     a += f"{str(self.__cellsList[i][j])}"
-
-            a += "]\n"
-
-            if i < len(self.__columnsList):
-                b += str(f"{self.__columnsList[i]}\n")
-
-            if i < len(self.__rowsList):
-                c += str(f"{self.__rowsList[i]}\n")
-
-        return f"""
-                Columns = {self.__gridColumns}
-                Rows = {self.__gridRows}
-                Cells Amount = {self.__gridSize}""" + a + b + c
-
+            a += "]"
+            print(a)  # Imprime la lista de celdas
 
     def getCell(self, row: int, column: int) -> Cell:
         return self.__cellsList[row][column]
@@ -127,4 +113,3 @@ class Grid:
 
     def getColumnsList(self) -> list[list[int]]:
         return self.__columnsList
-

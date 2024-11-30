@@ -81,7 +81,6 @@ class Jugar:
                 boton.manejar_evento(evento)
             pos = pygame.mouse.get_pos()
             self.manejar_clic(pos)
-
         if self.creativo == 1:
             self.saveButton.manejar_evento(evento)
 
@@ -96,9 +95,11 @@ class Jugar:
 
             if 0 <= row < self.grid.getGridRows() and 0 <= col < self.grid.getGridColumns():
                 if self.modo_pista_activado:
-                    self.levelnonograma.useClue(row, col)
-                    self.modo_pista_activado = False
-                    print(f"Pista usada en ({row}, {col})")
+                    if pygame.mouse.get_pressed()[0]:
+                        self.levelnonograma.useClue(row, col)
+                        self.modo_pista_activado = False
+                        return
+
                 if pygame.mouse.get_pressed()[0]:
                     if self.levelnonograma.getCurrentGrid().getCell(row, col).CurrentState() == CellStateEnum.EMPTY:
                         self.levelnonograma.changeCell(
@@ -154,12 +155,13 @@ class Jugar:
         ventana.fill((255, 255, 255))
 
         width, height = ventana.get_size()
-        ventana.blit(self.fondo_imagen, (width/2-400, height/2-300))
+        ventana.blit(self.fondo_imagen, (width / 2 - 400, height / 2 - 300))
         font = pygame.font.Font(None, 25)
 
+        # Mostrar el contador de pistas
         pistas_texto = f"Pistas restantes: {
             self.levelnonograma.getRemainingClues()}"
-        pistas_surface = font.render(pistas_texto, True, (0, 0, 0))
+        pistas_surface = font.render(pistas_texto, True, (255, 255, 255))
         pistas_rect = pistas_surface.get_rect()
         pistas_rect.topleft = (10, 10)
         ventana.blit(pistas_surface, pistas_rect)
@@ -179,17 +181,19 @@ class Jugar:
                 text_rect = text_surface.get_rect()
                 text_rect.centerx = self.start_x + col_idx * \
                     self.cell_size + self.cell_size // 2
-                text_rect.bottom = self.start_y + 10 - (len(col)-num_idx) * 17
+                text_rect.bottom = self.start_y + \
+                    10 - (len(col) - num_idx) * 17
                 ventana.blit(text_surface, text_rect)
 
-        for row_idx, row in enumerate(self.grid.getCellsList()):
+        for row_idx, row in enumerate(self.levelnonograma.getCurrentGrid().getCellsList()):
             for col_idx, cell in enumerate(row):
+                # self.levelnonograma.getCurrentGrid().printLists()
                 if cell.CurrentState() == CellStateEnum.MARKED:
                     color = (255, 0, 0)
                     rect = pygame.Rect(self.start_x + col_idx * self.cell_size, self.start_y +
                                        row_idx * self.cell_size, self.cell_size, self.cell_size)
-                    pygame.draw.line(
-                        ventana, color, rect.topleft, rect.bottomright, 2)
+                    pygame.draw.line(ventana, color, rect.topleft,
+                                     rect.bottomright, 2)
                     pygame.draw.line(
                         ventana, color, rect.bottomleft, rect.topright, 2)
                 else:

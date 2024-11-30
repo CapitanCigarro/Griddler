@@ -1,12 +1,13 @@
 from typing import Any
 from .CellStateEnum import CellStateEnum
 
+
 class Cell:
     """
     Logic Cell class
     Attributes
     ----------
-    
+
     __expectedState : int
         Expected state for this cell, 0 for EMPTY, 1 for PAINTED
 

@@ -35,6 +35,5 @@ class Level:
                 self.__score += clue_cell.setCurrentState(
                     CellStateEnum.PAINTED)
             else:
-                self.__score += clue_cell.setCurrentState(
-                    CellStateEnum.MARKED)
+                self.__score += clue_cell.setCurrentState(CellStateEnum.MARKED)
             self.__remainingClues -= 1
