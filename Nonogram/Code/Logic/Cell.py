@@ -17,19 +17,20 @@ class Cell:
     -------
 
     """
-    __expectedState: CellStateEnum
-    __currentState: CellStateEnum
-    __solved: bool
-
-    def __init__(self, expectedState: int) -> None:
+            
+    __expectedState : CellStateEnum
+    __currentState : CellStateEnum
+    __solved : bool
+    
+    def __init__(self, expectedState : int) -> None:
         self.__expectedState = CellStateEnum(expectedState)
         self.__currentState = CellStateEnum.EMPTY
         if self.__expectedState == CellStateEnum.EMPTY:
             self.__solved = True
         else:
-            self.__solved = False
-
-    def setCurrentState(self, state: CellStateEnum) -> int:
+            self.__solved  = False
+        
+    def setCurrentState(self, state : CellStateEnum) -> int:
         """
         sets state and compares to expected
 
@@ -83,6 +84,12 @@ class Cell:
 
     def CurrentState(self) -> CellStateEnum:
         return self.__currentState
+
+    def isSolved(self) -> bool:
+        return self.__solved
+    
+# TODO delete this
+
 
     def isSolved(self) -> bool:
         return self.__solved
