@@ -10,6 +10,7 @@ class TestCell(unittest.TestCase):
     emptyCell = Cell(CellStateEnum.EMPTY)
     paintedCell = Cell(CellStateEnum.PAINTED)
 
+
     def testCorrect(self):
         self.assertEqual(self.emptyCell.setCurrentState(
             CellStateEnum.EMPTY), 1)

@@ -1,15 +1,12 @@
 from typing import Any
 from .CellStateEnum import CellStateEnum
 
-
 class Cell:
-
     """
     Logic Cell class
-
     Attributes
     ----------
-
+    
     __expectedState : int
         Expected state for this cell, 0 for EMPTY, 1 for PAINTED
 
@@ -19,11 +16,7 @@ class Cell:
     Methods
     -------
 
-    setCurrentState(__expectedState : CellStateEnum) -> int
-        sets and compares state of cell
-
     """
-
     __expectedState: CellStateEnum
     __currentState: CellStateEnum
     __solved: bool
@@ -93,23 +86,3 @@ class Cell:
 
     def isSolved(self) -> bool:
         return self.__solved
-
-# TODO delete this
-
-
-""" emptyCell = Cell(CellStateEnum.EMPTY)
-emptyCell.setCurrentState(CellStateEnum.PAINTED)
-paintedCell = Cell(CellStateEnum.PAINTED)
-def testCorrect():
-    print(f"1 == {emptyCell.setCurrentState(CellStateEnum.EMPTY)}\n")
-    print(f"0 == {emptyCell.setCurrentState(CellStateEnum.MARKED)}\n")
-    print(f"1 == {paintedCell.setCurrentState(CellStateEnum.PAINTED)}\n")
-    
-def testIncorrect():
-    print(f"-1 == {emptyCell.setCurrentState(CellStateEnum.PAINTED)}")
-    print(f"0 == {emptyCell.setCurrentState(CellStateEnum.PAINTED)}")
-    print(f"-1 == {paintedCell.setCurrentState(CellStateEnum.EMPTY)}")
-    print(f"0 == {paintedCell.setCurrentState(CellStateEnum.MARKED)}")
-    
-testCorrect()
-testIncorrect() """

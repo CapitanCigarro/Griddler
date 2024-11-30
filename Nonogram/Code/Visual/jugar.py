@@ -60,8 +60,8 @@ class Jugar:
         else:
             if self.callSave == False:
                 self.actualLector.addnivel(self.list_to_save)
+                print("Nivel guardado!")
             self.callSave = True
-            print("Nivel guardado!")
         self.ir_a_menu()
 
     def calcular_tamano_celdas(self):
