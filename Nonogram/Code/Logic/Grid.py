@@ -14,7 +14,11 @@ class Grid:
     def __init__(self, grid: list[list[int]]) -> None:
         self.__gridRows = len(grid)  # How many rows
         self.__gridColumns = len(grid[0])  # How many columns
-
+        self.__gridSize = self.__gridRows * self.__gridRows
+        self.__cellsList = []
+        self.__rowsList = []
+        self.__columnsList = []
+        self.__initializeLists(grid)
 
         #self.printLists()
 
