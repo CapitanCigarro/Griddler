@@ -1,3 +1,4 @@
+
 from Grid import Grid
 from CellStateEnum import CellStateEnum
 from NoCluesRemainingException import NoCluesRemainingException
@@ -44,3 +45,4 @@ class Level:
         return self.__gameMode
     def setGameMode(self, change : GameModeEnum) -> None:
         self.__gameMode = change
+
