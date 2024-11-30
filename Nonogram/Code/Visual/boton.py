@@ -7,9 +7,14 @@ class Boton:
         self.pos = pos
         self.tamano = tamano
         self.colores = colores
+        self.firstcolor = colores
+        self.seconcolor = ((100,0,0),(255,255,255))
         self.accion = accion
         self.rect = pygame.Rect(pos, tamano)
-        self.fuente = pygame.font.Font(None, 74)
+        self.fuente = pygame.font.Font(None, 50)
+
+    def changefontsize(self,size):
+        self.fuente = pygame.font.Font(None,size)
 
     def dibujar(self, ventana):
         color_fondo, color_texto = self.colores
@@ -18,7 +23,14 @@ class Boton:
         ventana.blit(texto_renderizado, texto_renderizado.get_rect(
             center=self.rect.center))
 
+    def updatePosX(self,pos):
+        self.rect = pygame.Rect(pos, self.tamano)
+
     def manejar_evento(self, evento):
         if evento.type == pygame.MOUSEBUTTONDOWN and evento.button == 1:
             if self.rect.collidepoint(evento.pos):
-                self.accion()        
+                self.accion()
+        if self.rect.collidepoint(pygame.mouse.get_pos()):
+            self.colores = self.seconcolor
+        if not self.rect.collidepoint(pygame.mouse.get_pos()):
+            self.colores = self.firstcolor

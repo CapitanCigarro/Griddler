@@ -1,3 +1,5 @@
+from itertools import count
+
 import pygame
 
 from Code.Visual.ChooseNonogram import ChooseNonogram
@@ -18,15 +20,17 @@ class elegirTamaño(Panel):
         self.fuente = pygame.font.Font(None, 74)
         self.botones = [
             Boton("15x15", (300, 350), (200, 50),
-                  ((80, 80, 80), (255, 255, 255)), self.choose_15x15),
+                  ((0, 0, 0), (255, 255, 255)), self.choose_15x15),
             Boton("10x10", (300, 450), (200, 50),
-                  ((80, 80, 80), (255, 255, 255)), self.choose_10x10),
+                  ((0, 0, 0), (255, 255, 255)), self.choose_10x10),
             Boton("5x5", (300, 550), (200, 50),
-                  ((80, 80, 80), (255, 255, 255)), self.choose_5x5)
+                  ((0, 0, 0), (255, 255, 255)), self.choose_5x5)
         ]
         self.boton_retroceder = Boton("Retroceder", (50, 50), (200, 50),
-                                      ((80, 80, 80), (255, 255, 255)), self.ir_a_menu)
+                                      ((0, 0, 0), (255, 255, 255)), self.ir_a_menu)
         self.mostrar_boton_retroceder = True
+        self.fondo_imagen = pygame.image.load("Imagenes/Tam fondo.png")
+        self.fondo_imagen = pygame.transform.scale(self.fondo_imagen, (800, 600))
 
     def choose_15x15(self):
         self.app.cambiar_panel(ChooseNonogram(
@@ -67,15 +71,19 @@ class elegirTamaño(Panel):
                     self.app.cambiar_panel(self.app.menu)
                 else:
                     self.ir_a_menu()
-        elif evento.type == pygame.MOUSEBUTTONDOWN:
-            for boton in self.botones:
-                boton.manejar_evento(evento)
-            if self.mostrar_boton_retroceder:
-                self.boton_retroceder.manejar_evento(evento)
+        for boton in self.botones:
+            boton.manejar_evento(evento)
+        if self.mostrar_boton_retroceder:
+            self.boton_retroceder.manejar_evento(evento)
 
     def dibujar(self, ventana):
         ventana.fill((80, 80, 80))
+        width, height =  ventana.get_size()
+        ventana.blit(self.fondo_imagen, (width/2-400,height/2-300))
+        count = 0
         for boton in self.botones:
+            boton.updatePosX((width//2 - 95,height//4 + 80 * count +40))
             boton.dibujar(ventana)
+            count +=1
         if self.mostrar_boton_retroceder:
             self.boton_retroceder.dibujar(ventana)

@@ -1,7 +1,10 @@
 import pygame
+
+from .boton import Boton
 from ..Logic.Grid import Grid
 from ..Logic.Cell import CellStateEnum
 from ..Logic.Level import Level
+from ..Logic.LectorNiveles import LectorNiveles
 
 
 class Jugar:
@@ -9,19 +12,55 @@ class Jugar:
         self.app = app
         self.grid = grid
         self.levelnonograma = Level(self.grid)
-        self.max_area_size = 500
+        self.max_area_size = 450
         self.cell_size = self.calcular_tamano_celdas()
-        self.start_x = 100
-        self.start_y = 100
+        window_width, window_height = app.ventana.get_size()
+        self.start_x = window_width // 2 - self.max_area_size // 2
+        self.start_y = window_height- self.max_area_size-30
         self.botones = []
+        self.creativo = 0
         self.ventana_nonograma_emergente = False
         self.nonograma_completado = False
+        self.fondo_imagen = pygame.image.load("Imagenes/NivelFondo.png")
+        self.fondo_imagen = pygame.transform.scale(self.fondo_imagen, (800, 600))
+        self.callSave = False
        # grid.printLists()
+
+    def modo_creativo(self, ln:LectorNiveles,l:list,ls:int):
+        self.fondo_imagen = pygame.image.load("Imagenes/CrearNivelFondo.png")
+        self.fondo_imagen = pygame.transform.scale(self.fondo_imagen, (800, 600))
+        self.creativo = 1
+        self.actualLector = ln
+        width, height = self.app.ventana.get_size()
+        self.saveButton = Boton("Guardar e ir al menu",(width/2-145,30),(300,50),((0, 0, 0), (255, 255, 255)),self.save_action)
+        self.saveButton.changefontsize(30)
+        self.list_to_save = l
+        self.list_size = ls
+        self.botones.append(self.saveButton)
+
+    def save_action(self):
+        isempty = 1
+        for r in range(self.list_size):
+            for c in range(self.list_size):
+                value = self.levelnonograma.getCurrentGrid().getCell(r,c).CurrentState().value
+                if value == 1:
+                    self.list_to_save[r][c] = 1
+                    isempty = 0
+                else:
+                    self.list_to_save[r][c] = 0
+        if isempty == 1:
+            print("No es posible guardar un nivel vacío!")
+        else:
+            if self.callSave == False:
+                self.actualLector.addnivel(self.list_to_save)
+            self.callSave = True
+            print("Nivel guardado!")
+        self.ir_a_menu()
 
     def calcular_tamano_celdas(self):
         rows = self.grid.getGridRows()
         cols = self.grid.getGridColumns()
-        return min(self.max_area_size // rows, self.max_area_size // cols)
+        return max(self.max_area_size // rows, self.max_area_size // cols)
 
     def ir_a_menu(self):
         self.app.cambiar_panel(self.app.menu)
@@ -35,6 +74,9 @@ class Jugar:
                 boton.manejar_evento(evento)
             pos = pygame.mouse.get_pos()
             self.manejar_clic(pos)
+
+        if self.creativo == 1:
+            self.saveButton.manejar_evento(evento)
 
     def manejar_clic(self, pos):
         if not self.nonograma_completado:
@@ -59,6 +101,8 @@ class Jugar:
                             row, col, CellStateEnum.EMPTY)
 
                 if self.levelnonograma.getScore() == (self.grid.getGridRows() * self.grid.getGridColumns()):
+                    if self.creativo == 1:
+                        return
                     print("¡Felicidades! Has completado el nonograma.")
                     self.ventana_nonograma_emergente = True
                     self.nonograma_completado = True
@@ -95,11 +139,13 @@ class Jugar:
         self.ventana = ventana
         ventana.fill((255, 255, 255))
 
-        font = pygame.font.Font(None, 24)
+        width, height =  ventana.get_size()
+        ventana.blit(self.fondo_imagen, (width/2-400,height/2-300))
+        font = pygame.font.Font(None, 25)
 
         for row_idx, row in enumerate(self.grid.getRowsList()):
             for num_idx, num in enumerate(row):
-                text_surface = font.render(str(num), True, (0, 0, 0))
+                text_surface = font.render(str(num), True, (255, 255, 255))
                 text_rect = text_surface.get_rect()
                 text_rect.right = self.start_x - 10 - num_idx * 20
                 text_rect.centery = self.start_y + row_idx * \
@@ -108,11 +154,11 @@ class Jugar:
 
         for col_idx, col in enumerate(self.grid.getColumnsList()):
             for num_idx, num in enumerate(col):
-                text_surface = font.render(str(num), True, (0, 0, 0))
+                text_surface = font.render(str(num), True, (255, 255, 255))
                 text_rect = text_surface.get_rect()
                 text_rect.centerx = self.start_x + col_idx * \
                     self.cell_size + self.cell_size // 2
-                text_rect.bottom = self.start_y + 10 - (len(col)-num_idx) * 20
+                text_rect.bottom = self.start_y + 10 - (len(col)-num_idx) * 17
                 ventana.blit(text_surface, text_rect)
 
         for row_idx, row in enumerate(self.grid.getCellsList()):

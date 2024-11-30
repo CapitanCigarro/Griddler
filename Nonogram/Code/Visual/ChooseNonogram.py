@@ -6,6 +6,8 @@ from .levelButton import LevelButton
 
 #from Code.Visual.ventana import Aplicacion
 from .panel import Panel
+from ..Logic.Grid import Grid
+from ..Logic.Level import Level
 
 
 class ChooseNonogram(Panel):
@@ -29,26 +31,39 @@ class ChooseNonogram(Panel):
         self.font = pygame.font.Font(None, 74)
         self.size = size
         self.levelsButtons = []
-        print(levels)
+        action = app.cambiar_panel
         for i in range(levels):
-            action = app.cambiar_panel
             relatedNonogram = Jugar(self.app, nonogram.getgridActual(grid, i))
-            level = LevelButton(str(i + 1), (20 + i * 50 + i * 10, 20 + (i // 10) * 50 + (i // 10) * 10),
-                                (50, 50), ((80, 80, 80), (255, 255, 255)), action, relatedNonogram, app)
+            level = LevelButton(str(i + 1), (20 + (i%7) * 100 + (i%7) * 10, 60 + (i // 7) * 100 + (i // 7) * 10),
+                                (50, 50), ((0, 0, 0), (255, 255, 255)), action, relatedNonogram, app,True)
             self.levelsButtons.append(level)
-        
-        
+
+        # Creador de nivel
+        emptyList = []
+        for i in range(grid):
+            emptyList.append([0]*grid)
+        emptyNonogram = Jugar(self.app, Grid(emptyList))
+        emptyNonogram.modo_creativo(nonogram.getlectornivel(grid),emptyList,grid)
+        width,height = app.ventana.get_size()
+        createLevelButton = LevelButton("Crear",(width - 200,height - 50),
+                                (200, 50), ((0, 0, 0), (255, 255, 255)), action,emptyNonogram, app,False)
+        self.levelsButtons.append(createLevelButton)
+        self.fondo_imagen = pygame.image.load("Imagenes/Niveles fondo.png")
+        self.fondo_imagen = pygame.transform.scale(self.fondo_imagen, (800, 600))
+
+
     def manejar_evento(self, evento):
         if evento.type == pygame.KEYDOWN:
             if evento.key == pygame.K_ESCAPE: 
                 self.app.cambiar_panel(self.app.menu)
-        
-        if evento.type == pygame.MOUSEBUTTONDOWN and evento.button == 1:
-            for level in self.levelsButtons:
-                level.manejar_evento(evento)
-            
+
+        for level in self.levelsButtons:
+            level.manejar_evento(evento)
+
     def dibujar(self, ventana):
         ventana.fill((80, 80, 80))
+        width, height =  ventana.get_size()
+        ventana.blit(self.fondo_imagen, (width/2-400,height/2-300))
         for level in self.levelsButtons:
             level.draw(ventana)
         

@@ -9,7 +9,7 @@ from .tutorial import Tutorial
 pygame.init()
 
 ANCHO_VENTANA = 800
-ALTO_VENTANA = 800
+ALTO_VENTANA = 600
 
 class Aplicacion:
     def __init__(self):

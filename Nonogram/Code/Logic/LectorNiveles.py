@@ -41,3 +41,14 @@ class LectorNiveles:
     def getsizeniveles(self) -> int:
         if len(self.levels) > 1:
             return len(self.levels[1])
+
+    def addnivel(self,nivel:list):
+        self.levels.append(nivel)
+        self.saveLevels()
+
+    def saveLevels(self):
+        with open(self.__rutaArchivo, mode='w', newline='') as csvfile:
+            wr = csv.writer(csvfile,delimiter=';')
+            for i in range(self.gettotalniveles()):
+                wr.writerows(self.levels[i+1])
+                wr.writerow([None] * self.getsizeniveles())

@@ -9,7 +9,7 @@ class Selector:
 
     __max = 0
     __valor = 0
-    __colores = ((80, 80, 80), (255, 255, 255))
+    __colores = ((0, 0, 0), (255, 255, 255))
 
     def __init__(self, x: int, y: int, max: int):
         self.__pos = (x, y)

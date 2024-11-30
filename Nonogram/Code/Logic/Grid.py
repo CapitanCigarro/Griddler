@@ -18,7 +18,7 @@ class Grid:
         self.__rowsList = []
         self.__columnsList = []
         self.__initializeLists(grid)
-        self.printLists()
+        #self.printLists()
 
     def __initializeLists(self, grid: list[list[int]]) -> None:
         rangeVar = self.__gridRows if self.__gridRows > self.__gridColumns else self.__gridColumns
