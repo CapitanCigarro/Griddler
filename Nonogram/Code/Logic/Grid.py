@@ -2,6 +2,7 @@ from ..Logic.Cell import Cell
 
 
 class Grid:
+
     __gridSize: int
     __gridRows: int
     __gridColumns: int
@@ -13,11 +14,8 @@ class Grid:
     def __init__(self, grid: list[list[int]]) -> None:
         self.__gridRows = len(grid)  # How many rows
         self.__gridColumns = len(grid[0])  # How many columns
-        self.__gridSize = self.__gridRows * self.__gridRows
-        self.__cellsList = []
-        self.__rowsList = []
-        self.__columnsList = []
-        self.__initializeLists(grid)
+
+
         #self.printLists()
 
     def __initializeLists(self, grid: list[list[int]]) -> None:
@@ -81,13 +79,6 @@ class Grid:
         print("Rows List:", self.__rowsList)
         print("Columns List:", self.__columnsList)
 
-    def __str__(self) -> str:
-        a = """\nCells = 
-"""
-        b = """\nColumns = 
-"""
-        c = """\nRows = 
-"""
 
         for i in range(len(self.__cellsList)):
             a += "["
@@ -111,6 +102,7 @@ class Grid:
                 Rows = {self.__gridRows}
                 Cells Amount = {self.__gridSize}""" + a + b + c
 
+
     def getCell(self, row: int, column: int) -> Cell:
         return self.__cellsList[row][column]
 
@@ -131,3 +123,4 @@ class Grid:
 
     def getColumnsList(self) -> list[list[int]]:
         return self.__columnsList
+
