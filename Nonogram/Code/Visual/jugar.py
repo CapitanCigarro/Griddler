@@ -159,8 +159,7 @@ class Jugar:
         font = pygame.font.Font(None, 25)
 
         # Mostrar el contador de pistas
-        pistas_texto = f"Pistas restantes: {
-            self.levelnonograma.getRemainingClues()}"
+        pistas_texto = f"Pistas restantes: {self.levelnonograma.getRemainingClues()}"
         pistas_surface = font.render(pistas_texto, True, (255, 255, 255))
         pistas_rect = pistas_surface.get_rect()
         pistas_rect.topleft = (10, 10)
