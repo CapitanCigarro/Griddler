@@ -5,13 +5,14 @@ from ..Logic.Grid import Grid
 from ..Logic.Cell import CellStateEnum
 from ..Logic.Level import Level
 from ..Logic.LectorNiveles import LectorNiveles
+from ..Logic.GameModeEnum import GameModeEnum
 
 
 class Jugar:
     def __init__(self, app, grid: Grid):
         self.app = app
         self.grid = grid
-        self.levelnonograma = Level(self.grid)
+        self.levelnonograma = Level(self.grid, GameModeEnum.ZEN)
         self.max_area_size = 450
         self.cell_size = self.calcular_tamano_celdas()
         window_width, window_height = app.ventana.get_size()

@@ -1,6 +1,6 @@
 from enum import Enum
 
-class CellStateEnum(Enum):
+class GameModeEnum(Enum):
     ZEN = 0
     LIVES = 1
     TIME = 2

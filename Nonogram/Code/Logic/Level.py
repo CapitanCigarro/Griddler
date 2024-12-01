@@ -1,8 +1,7 @@
-
-from Grid import Grid
-from CellStateEnum import CellStateEnum
-from NoCluesRemainingException import NoCluesRemainingException
-import GameModeEnum
+from .Grid import Grid
+from .CellStateEnum import CellStateEnum
+from .NoCluesRemainingException import NoCluesRemainingException
+from .GameModeEnum import GameModeEnum
 
 class Level:
     __currentGrid : Grid
@@ -44,4 +43,7 @@ class Level:
         return self.__gameMode
     def setGameMode(self, change : GameModeEnum) -> None:
         self.__gameMode = change
-
+    def getRemainingClues(self) -> int:
+        return self.__remainingClues
+    def getCurrentGrid(self) -> Grid:
+        return self.__currentGrid
