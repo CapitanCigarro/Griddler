@@ -20,7 +20,6 @@ class Level:
                 if self.__currentGrid.getCell(i, j).isSolved():
                     self.__score += 1
 
-
     def getScore(self) -> int:
         return self.__score
 
@@ -40,7 +39,7 @@ class Level:
                     self.__remainingClues -= 1
             else:
                 raise NoCluesRemainingException("No quedan pistas para usar")
-        
+
     def getGameMode(self) -> GameModeEnum:
         return self.__gameMode
     def setGameMode(self, change : GameModeEnum) -> None:

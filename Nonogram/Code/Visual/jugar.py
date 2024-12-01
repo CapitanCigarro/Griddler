@@ -16,23 +16,30 @@ class Jugar:
         self.cell_size = self.calcular_tamano_celdas()
         window_width, window_height = app.ventana.get_size()
         self.start_x = window_width // 2 - self.max_area_size // 2
-        self.start_y = window_height- self.max_area_size-30
+        self.start_y = window_height - self.max_area_size-30
         self.botones = []
         self.creativo = 0
         self.ventana_nonograma_emergente = False
         self.nonograma_completado = False
         self.fondo_imagen = pygame.image.load("Imagenes/NivelFondo.png")
-        self.fondo_imagen = pygame.transform.scale(self.fondo_imagen, (800, 600))
+        self.fondo_imagen = pygame.transform.scale(
+            self.fondo_imagen, (800, 600))
         self.callSave = False
        # grid.printLists()
+        self.use_clue_button = Boton("Usar Pista", (window_width - 150, 30),
+                                     (120, 50), ((0, 0, 0), (255, 255, 255)), self.activar_modo_pista)
+        self.botones.append(self.use_clue_button)
+        self.modo_pista_activado = False
 
-    def modo_creativo(self, ln:LectorNiveles,l:list,ls:int):
+    def modo_creativo(self, ln: LectorNiveles, l: list, ls: int):
         self.fondo_imagen = pygame.image.load("Imagenes/CrearNivelFondo.png")
-        self.fondo_imagen = pygame.transform.scale(self.fondo_imagen, (800, 600))
+        self.fondo_imagen = pygame.transform.scale(
+            self.fondo_imagen, (800, 600))
         self.creativo = 1
         self.actualLector = ln
         width, height = self.app.ventana.get_size()
-        self.saveButton = Boton("Guardar e ir al menu",(width/2-145,30),(300,50),((0, 0, 0), (255, 255, 255)),self.save_action)
+        self.saveButton = Boton("Guardar e ir al menu", (width/2-145, 30),
+                                (300, 50), ((0, 0, 0), (255, 255, 255)), self.save_action)
         self.saveButton.changefontsize(30)
         self.list_to_save = l
         self.list_size = ls
@@ -42,7 +49,7 @@ class Jugar:
         isempty = 1
         for r in range(self.list_size):
             for c in range(self.list_size):
-                value = self.levelnonograma.getCurrentGrid().getCell(r,c).CurrentState().value
+                value = self.levelnonograma.getCurrentGrid().getCell(r, c).CurrentState().value
                 if value == 1:
                     self.list_to_save[r][c] = 1
                     isempty = 0
@@ -74,9 +81,11 @@ class Jugar:
                 boton.manejar_evento(evento)
             pos = pygame.mouse.get_pos()
             self.manejar_clic(pos)
-
         if self.creativo == 1:
             self.saveButton.manejar_evento(evento)
+
+    def activar_modo_pista(self):
+        self.modo_pista_activado = True
 
     def manejar_clic(self, pos):
         if not self.nonograma_completado:
@@ -85,18 +94,24 @@ class Jugar:
             row = (y - self.start_y) // self.cell_size
 
             if 0 <= row < self.grid.getGridRows() and 0 <= col < self.grid.getGridColumns():
+                if self.modo_pista_activado:
+                    if pygame.mouse.get_pressed()[0]:
+                        self.levelnonograma.useClue(row, col)
+                        self.modo_pista_activado = False
+                        return
+
                 if pygame.mouse.get_pressed()[0]:
-                    if self.levelnonograma.getCurrentGrid().getCell(row, col).CurrentState() == CellStateEnum.MARKED or CellStateEnum.EMPTY:
+                    if self.levelnonograma.getCurrentGrid().getCell(row, col).CurrentState() == CellStateEnum.EMPTY:
                         self.levelnonograma.changeCell(
                             row, col, CellStateEnum.PAINTED)
-                    elif self.levelnonograma.getCurrentGrid().getCell(row, col).CurrentState() == CellStateEnum.PAINTED:
+                    elif self.levelnonograma.getCurrentGrid().getCell(row, col).CurrentState() == CellStateEnum.PAINTED or CellStateEnum.MARKED:
                         self.levelnonograma.changeCell(
                             row, col, CellStateEnum.EMPTY)
                 elif pygame.mouse.get_pressed()[2]:
                     if self.levelnonograma.getCurrentGrid().getCell(row, col).CurrentState() == CellStateEnum.EMPTY:
                         self.levelnonograma.changeCell(
                             row, col, CellStateEnum.MARKED)
-                    elif self.levelnonograma.getCurrentGrid().getCell(row, col).CurrentState() == CellStateEnum.MARKED or CellStateEnum.EMPTY:
+                    elif self.levelnonograma.getCurrentGrid().getCell(row, col).CurrentState() == CellStateEnum.MARKED or CellStateEnum.PAINTED:
                         self.levelnonograma.changeCell(
                             row, col, CellStateEnum.EMPTY)
 
@@ -139,9 +154,16 @@ class Jugar:
         self.ventana = ventana
         ventana.fill((255, 255, 255))
 
-        width, height =  ventana.get_size()
-        ventana.blit(self.fondo_imagen, (width/2-400,height/2-300))
+        width, height = ventana.get_size()
+        ventana.blit(self.fondo_imagen, (width / 2 - 400, height / 2 - 300))
         font = pygame.font.Font(None, 25)
+
+        # Mostrar el contador de pistas
+        pistas_texto = f"Pistas restantes: {self.levelnonograma.getRemainingClues()}"
+        pistas_surface = font.render(pistas_texto, True, (255, 255, 255))
+        pistas_rect = pistas_surface.get_rect()
+        pistas_rect.topleft = (10, 10)
+        ventana.blit(pistas_surface, pistas_rect)
 
         for row_idx, row in enumerate(self.grid.getRowsList()):
             for num_idx, num in enumerate(row):
@@ -158,17 +180,19 @@ class Jugar:
                 text_rect = text_surface.get_rect()
                 text_rect.centerx = self.start_x + col_idx * \
                     self.cell_size + self.cell_size // 2
-                text_rect.bottom = self.start_y + 10 - (len(col)-num_idx) * 17
+                text_rect.bottom = self.start_y + \
+                    10 - (len(col) - num_idx) * 17
                 ventana.blit(text_surface, text_rect)
 
-        for row_idx, row in enumerate(self.grid.getCellsList()):
+        for row_idx, row in enumerate(self.levelnonograma.getCurrentGrid().getCellsList()):
             for col_idx, cell in enumerate(row):
+                # self.levelnonograma.getCurrentGrid().printLists()
                 if cell.CurrentState() == CellStateEnum.MARKED:
                     color = (255, 0, 0)
                     rect = pygame.Rect(self.start_x + col_idx * self.cell_size, self.start_y +
                                        row_idx * self.cell_size, self.cell_size, self.cell_size)
-                    pygame.draw.line(
-                        ventana, color, rect.topleft, rect.bottomright, 2)
+                    pygame.draw.line(ventana, color, rect.topleft,
+                                     rect.bottomright, 2)
                     pygame.draw.line(
                         ventana, color, rect.bottomleft, rect.topright, 2)
                 else:
