@@ -8,11 +8,13 @@ class Level:
     __score : int
     __remainingClues : int
     __gameMode : GameModeEnum
+    __lives : int
 
     def __init__(self, expected : Grid, mode : GameModeEnum) -> None:
         self.__currentGrid = expected
         self.__score = 0
         self.__remainingClues = 3
+        self.__lives = 3
         self.__gameMode = mode
         for i in range(self.__currentGrid.getGridRows()):
             for j in range(self.__currentGrid.getGridColumns()):
@@ -23,19 +25,26 @@ class Level:
         return self.__score
 
     def changeCell(self, i : int, j : int, state : CellStateEnum) -> None:
-        if self.__gameMode == GameModeEnum.ZEN:
+        if self.__gameMode == GameModeEnum.LIVES:
+            if self.__currentGrid.getCell(i, j).isSolved():
+                pass
+            elif state == self.__currentGrid.getCell(i, j).getExpectedState():
+                self.__score += self.__currentGrid.getCell(i, j).setCurrentState(state)
+            else:
+                self.__lives =- 1
+                self.__score += self.__currentGrid.getCell(i, j).setCurrentState(self.__currentGrid.getCell(i, j).getExpectedState())
+        else:
             self.__score += self.__currentGrid.getCell(i, j).setCurrentState(state)
 
     def useClue(self, i : int, j : int) -> None:
         if self.__gameMode == GameModeEnum.ZEN:
             if self.__remainingClues > 0:
                 clue_cell = self.__currentGrid.getCell(i, j)
-                if not clue_cell.isSolved():
-                    if clue_cell.getExpectedState() == CellStateEnum.PAINTED:
-                        self.__score += clue_cell.setCurrentState(CellStateEnum.PAINTED)
-                    else:
-                        self.__score += clue_cell.setCurrentState(CellStateEnum.MARKED)
-                    self.__remainingClues -= 1
+                if clue_cell.getExpectedState() == CellStateEnum.PAINTED:
+                    self.__score += clue_cell.setCurrentState(CellStateEnum.PAINTED)
+                else:
+                    self.__score += clue_cell.setCurrentState(CellStateEnum.MARKED)
+                self.__remainingClues -= 1
             else:
                 raise NoCluesRemainingException("No quedan pistas para usar")
 
