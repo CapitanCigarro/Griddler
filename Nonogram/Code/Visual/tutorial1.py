@@ -30,3 +30,9 @@ class tutorial1(Panel):
 
         ventana.blit(self.fondo_imagen3,(10,200))
         ventana.blit(self.fondo_imagen4,(410,200))
+
+        self.fuente_tutorial=pygame.font.Font(None,20)
+        texto= "Ejemplo de usar pista y que no haya nada"
+        ventana.blit(self.fuente_tutorial.render(texto,True,(255, 255, 255)), (10, 170))
+        texto= "Rellenas los bloques continuos de 3 que se señalan"
+        ventana.blit(self.fuente_tutorial.render(texto,True,(255, 255, 255)), (410, 170))

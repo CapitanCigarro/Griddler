@@ -55,9 +55,9 @@ class Tutorial(Panel):
         ventana.blit(self.fondo_imagen2,(410,200))
 
         texto= "Rellenas primero los de 5 ya que es el tamaño maximo"
-        ventana.blit(self.fuente_tutorial.render(texto,True,(255, 255, 255)), (10, 200))
-        texto= "a"
-        ventana.blit(self.fuente_tutorial.render(texto,True,(255, 255, 255)), (410, 200))
+        ventana.blit(self.fuente_tutorial.render(texto,True,(255, 255, 255)), (10, 170))
+        texto= "Rellenas los 3 bloques continuos que se señala arriba"
+        ventana.blit(self.fuente_tutorial.render(texto,True,(255, 255, 255)), (410, 170))
 
         for boton in self.botones:
             boton.dibujar(ventana)
