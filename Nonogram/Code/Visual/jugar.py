@@ -116,7 +116,7 @@ class Jugar:
                                 row, col, CellStateEnum.PAINTED)
 
                             self.levelnonograma.getCurrentGrid().printLists()
-                        elif self.levelnonograma.getCurrentGrid().getCell(row, col).CurrentState() == CellStateEnum.PAINTED or CellStateEnum.MARKED:
+                        elif (self.levelnonograma.getCurrentGrid().getCell(row, col).CurrentState() == CellStateEnum.PAINTED or CellStateEnum.MARKED) and self.levelnonograma.getGameMode() == GameModeEnum.ZEN:
                             self.levelnonograma.changeCell(
                                 row, col, CellStateEnum.EMPTY)
 
@@ -127,7 +127,7 @@ class Jugar:
                                 row, col, CellStateEnum.MARKED)
 
                             self.levelnonograma.getCurrentGrid().printLists()
-                        elif self.levelnonograma.getCurrentGrid().getCell(row, col).CurrentState() == CellStateEnum.MARKED or CellStateEnum.PAINTED:
+                        elif (self.levelnonograma.getCurrentGrid().getCell(row, col).CurrentState() == CellStateEnum.MARKED or CellStateEnum.PAINTED) and self.levelnonograma.getGameMode() == GameModeEnum.ZEN:
                             self.levelnonograma.changeCell(
                                 row, col, CellStateEnum.EMPTY)
 
@@ -229,8 +229,7 @@ class Jugar:
 
         # Mostrar el contador de pistas
         if self.modo == GameModeEnum.ZEN:
-            pistas_texto = f"Pistas restantes: {
-                self.levelnonograma.getRemainingClues()}"
+            pistas_texto = f"Pistas restantes: {self.levelnonograma.getRemainingClues()}"
             pistas_surface = font.render(pistas_texto, True, (255, 255, 255))
             pistas_rect = pistas_surface.get_rect()
             pistas_rect.topleft = (10, 10)
