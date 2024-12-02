@@ -5,6 +5,8 @@ from .jugar import Jugar
 from .elegirTamaño import elegirTamaño
 from .opciones import Opciones
 from .tutorial import Tutorial
+from .tutorial1 import tutorial1
+
 
 pygame.init()
 
@@ -17,6 +19,7 @@ class Aplicacion:
         pygame.display.set_caption("Nonograma")
         # Aqui iran las distintas escenas
         self.menu = Menu(self)
+        self.tutorial1 = tutorial1(self)
         self.jugar: Jugar
         self.elegirTamaño = elegirTamaño(self)
         self.opciones = Opciones(self,self.ventana)

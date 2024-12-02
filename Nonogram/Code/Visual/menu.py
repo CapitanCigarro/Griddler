@@ -18,7 +18,7 @@ class Menu(Panel):
         ]
         pygame.font.init()
         self.fuente = pygame.font.Font(None, 100)
-        self.fondo_imagen = pygame.image.load("Imagenes/Menu fondo.png")
+        self.fondo_imagen = pygame.image.load("Nonogram/Imagenes/Menu fondo.png")
         self.fondo_imagen = pygame.transform.scale(self.fondo_imagen, (800, 600))
 
     # Estas definiciones seran cuando cree class jugar, tutorial y opciones

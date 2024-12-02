@@ -18,7 +18,7 @@ class Opciones(Panel):
         ]
         self.resoluciones = [(800, 600), (1024, 768), (1280, 720), (1920, 1080)]
         self.resolucion_selector = Selector(640, 350, len(self.resoluciones) - 1)
-        self.fondo_imagen = pygame.image.load("Imagenes/Opcion fondo.png")
+        self.fondo_imagen = pygame.image.load("Nonogram/Imagenes/Opcion fondo.png")
         self.fondo_imagen = pygame.transform.scale(self.fondo_imagen, (800, 600))
 
     def manejar_evento(self, evento):
@@ -26,7 +26,6 @@ class Opciones(Panel):
         if evento.type == pygame.KEYDOWN:
             if evento.key == pygame.K_ESCAPE: 
                 self.app.cambiar_panel(self.app.menu)
-        # Llama a los eventos de los botones
         for boton in self.botones:
             boton.manejar_evento(evento)
 
@@ -53,10 +52,12 @@ class Opciones(Panel):
             self.pantalla_completa = False
         else:
             # Cambiar a pantalla completa
-            self.ventana = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+            info_pantalla = pygame.display.Info()
+            ancho, alto = info_pantalla.current_w, info_pantalla.current_h
+            self.ventana = pygame.display.set_mode((ancho, alto), pygame.FULLSCREEN)
             self.pantalla_completa = True
 
     def aplicar_resolucion(self):
         nueva_resolucion = self.resoluciones[self.resolucion_selector.getvalor()]
-        
+        self.fondo_imagen = pygame.transform.scale(self.fondo_imagen, (nueva_resolucion[0], nueva_resolucion[1]))
         pygame.display.set_mode((nueva_resolucion[0], nueva_resolucion[1]))

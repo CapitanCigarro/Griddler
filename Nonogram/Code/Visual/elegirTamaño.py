@@ -29,7 +29,7 @@ class elegirTamaño(Panel):
         self.boton_retroceder = Boton("Retroceder", (50, 50), (200, 50),
                                       ((0, 0, 0), (255, 255, 255)), self.ir_a_menu)
         self.mostrar_boton_retroceder = True
-        self.fondo_imagen = pygame.image.load("Imagenes/Tam fondo.png")
+        self.fondo_imagen = pygame.image.load("Nonogram/Imagenes/Tam fondo.png")
         self.fondo_imagen = pygame.transform.scale(self.fondo_imagen, (800, 600))
 
     def choose_15x15(self):
