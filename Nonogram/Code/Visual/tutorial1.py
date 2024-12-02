@@ -9,14 +9,22 @@ class tutorial1(Panel):
         self.app = app
         pygame.font.init()
         self.fuente = pygame.font.Font(None, 100)
+        self.botones = [
+            Boton("RETROCEDER", (10, 540), (350, 50),((0, 0, 0), (255, 255, 255)), self.retroceder)
+        ]
         self.fondo_imagen = pygame.image.load("Imagenes/Tutorial_fondo.png")
         self.fondo_imagen = pygame.transform.scale(
             self.fondo_imagen, (800, 600))
+        
+    def retroceder(self):
+        self.app.cambiar_panel(self.app.tutorial)
 
     def manejar_evento(self, evento):
         if evento.type == pygame.KEYDOWN:
             if evento.key == pygame.K_ESCAPE:
-                self.app.cambiar_panel(self.app.tutorial)
+                self.app.cambiar_panel(self.app.menu)
+        for boton in self.botones:
+            boton.manejar_evento(evento)
 
     def dibujar(self, ventana):
         ventana.fill((80, 80, 80))
@@ -37,3 +45,6 @@ class tutorial1(Panel):
         ventana.blit(self.fuente_tutorial.render(texto,True,(255, 255, 255)), (10, 170))
         texto= "Rellenas los bloques continuos de 3 que se señalan"
         ventana.blit(self.fuente_tutorial.render(texto,True,(255, 255, 255)), (410, 170))
+
+        for boton in self.botones:
+            boton.dibujar(ventana)
