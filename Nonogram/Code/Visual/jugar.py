@@ -237,7 +237,7 @@ class Jugar:
             ventana.blit(pistas_surface, pistas_rect)
 
         # Mostrar el número de vidas restantes en el modo LIVES
-        if self.levelnonograma.getGameMode() == GameModeEnum.LIVES:
+        if self.modo == GameModeEnum.LIVES:
             vidas_texto = f"Vidas restantes: {self.levelnonograma.getLives()}"
             vidas_surface = font.render(vidas_texto, True, (255, 255, 255))
             vidas_rect = vidas_surface.get_rect()
