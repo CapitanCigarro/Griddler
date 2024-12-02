@@ -99,6 +99,8 @@ class Jugar:
                     if pygame.mouse.get_pressed()[0]:
                         self.levelnonograma.useClue(row, col)
                         self.modo_pista_activado = False
+                        # print(f"Pista usada en la celda ({row}, {col})")
+                        # self.levelnonograma.getCurrentGrid().printLists()
                         return
 
                 if pygame.mouse.get_pressed()[0]:
@@ -160,7 +162,8 @@ class Jugar:
         font = pygame.font.Font(None, 25)
 
         # Mostrar el contador de pistas
-        pistas_texto = f"Pistas restantes: {self.levelnonograma.getRemainingClues()}"
+        pistas_texto = f"Pistas restantes: {
+            self.levelnonograma.getRemainingClues()}"
         pistas_surface = font.render(pistas_texto, True, (255, 255, 255))
         pistas_rect = pistas_surface.get_rect()
         pistas_rect.topleft = (10, 10)
