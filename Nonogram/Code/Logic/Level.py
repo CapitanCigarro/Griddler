@@ -26,9 +26,6 @@ class Level:
     def getScore(self) -> int:
         return self.__score
 
-    def getLives(self) -> int:
-        return self.__lives
-
     def changeCell(self, i: int, j: int, state: CellStateEnum) -> None:
         if self.__gameMode == GameModeEnum.LIVES:
             if state == self.__currentGrid.getCell(i, j).getExpectedState():
@@ -73,3 +70,6 @@ class Level:
 
     def getCurrentGrid(self) -> Grid:
         return self.__currentGrid
+
+    def getLives(self) -> int:
+        return self.__lives
