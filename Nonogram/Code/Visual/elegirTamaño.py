@@ -29,8 +29,9 @@ class elegirTamaño(Panel):
         self.boton_retroceder = Boton("Retroceder", (50, 50), (200, 50),
                                       ((0, 0, 0), (255, 255, 255)), self.ir_a_menu)
         self.mostrar_boton_retroceder = True
-        self.fondo_imagen = pygame.image.load("Nonogram/Imagenes/Tam fondo.png")
-        self.fondo_imagen = pygame.transform.scale(self.fondo_imagen, (800, 600))
+        self.fondo_imagen = pygame.image.load("Imagenes/Tam fondo.png")
+        self.fondo_imagen = pygame.transform.scale(
+            self.fondo_imagen, (800, 600))
 
     def choose_15x15(self):
         self.app.cambiar_panel(ChooseNonogram(
@@ -78,12 +79,12 @@ class elegirTamaño(Panel):
 
     def dibujar(self, ventana):
         ventana.fill((80, 80, 80))
-        width, height =  ventana.get_size()
-        ventana.blit(self.fondo_imagen, (width/2-400,height/2-300))
+        width, height = ventana.get_size()
+        ventana.blit(self.fondo_imagen, (width/2-400, height/2-300))
         count = 0
         for boton in self.botones:
-            boton.updatePosX((width//2 - 95,height//4 + 80 * count +40))
+            boton.updatePosX((width//2 - 95, height//4 + 80 * count + 40))
             boton.dibujar(ventana)
-            count +=1
+            count += 1
         if self.mostrar_boton_retroceder:
             self.boton_retroceder.dibujar(ventana)

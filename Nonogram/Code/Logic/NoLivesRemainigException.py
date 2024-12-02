@@ -1,0 +1,2 @@
+class NoLivesRemainingException(Exception):
+    pass

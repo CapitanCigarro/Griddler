@@ -2,6 +2,7 @@ import pygame
 from .panel import Panel
 from .boton import Boton
 
+
 class Opciones(Panel):
     def __init__(self, app, ventana):
         super().__init__()
@@ -11,9 +12,9 @@ class Opciones(Panel):
         self.fuente = pygame.font.Font(None, 74)
         self.musicaOn = True
         self.canciones = [
-            "Nonogram/Musica/C418Sweden.mp3",
-            "Nonogram/Musica/CornfieldChase.mp3",
-            "Nonogram/Musica/lofi.mp3"
+            "Musica/C418Sweden.mp3",
+            "Musica/CornfieldChase.mp3",
+            "Musica/lofi.mp3"
         ]
         
         # Inicializar música
@@ -39,7 +40,7 @@ class Opciones(Panel):
         ]
 
         # Fondo
-        self.fondo_imagen = pygame.image.load("Nonogram/Imagenes/Opcion fondo.png")
+        self.fondo_imagen = pygame.image.load("Imagenes/Opcion fondo.png")
         self.fondo_imagen = pygame.transform.scale(self.fondo_imagen, (800, 600))
 
     def cambiarMusica(self, musica):
