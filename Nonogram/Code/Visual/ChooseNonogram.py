@@ -48,7 +48,7 @@ class ChooseNonogram(Panel):
         createLevelButton = LevelButton("Crear",(width - 200,height - 50),
                                 (200, 50), ((0, 0, 0), (255, 255, 255)), action,emptyNonogram, app,False)
         self.levelsButtons.append(createLevelButton)
-        self.fondo_imagen = pygame.image.load("Imagenes/Niveles fondo.png")
+        self.fondo_imagen = pygame.image.load("Nonogram/Imagenes/Niveles fondo.png")
         self.fondo_imagen = pygame.transform.scale(self.fondo_imagen, (800, 600))
 
 

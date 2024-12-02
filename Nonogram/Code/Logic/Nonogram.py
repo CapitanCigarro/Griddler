@@ -11,11 +11,11 @@ class Nonogram:
 
     def __init__(self):
         self.__lectorNivel5x5 = LectorNiveles(
-            "SavedNonograms/Levels5x5.csv")
+            "Nonogram/SavedNonograms/Levels5x5.csv")
         self.__lectorNivel10x10 = LectorNiveles(
-            "SavedNonograms/Levels10x10.csv")
+            "Nonogram/SavedNonograms/Levels10x10.csv")
         self.__lectorNivel15x15 = LectorNiveles(
-            "SavedNonograms/Levels15x15.csv")
+            "Nonogram/SavedNonograms/Levels15x15.csv")
 
     def getgridActual(self, tam: int, sel: int) -> Grid:
         if tam == 5:
