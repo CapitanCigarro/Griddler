@@ -6,13 +6,15 @@ from ..Logic.Cell import CellStateEnum
 from ..Logic.Level import Level
 from ..Logic.LectorNiveles import LectorNiveles
 from ..Logic.GameModeEnum import GameModeEnum
+from ..Logic.NoLivesRemainigException import NoLivesRemainingException
 
 
 class Jugar:
-    def __init__(self, app, grid: Grid):
+    def __init__(self, app, grid: Grid, modo=GameModeEnum.LIVES):
         self.app = app
         self.grid = grid
-        self.levelnonograma = Level(self.grid, GameModeEnum.ZEN)
+        self.modo = modo
+        self.levelnonograma = Level(self.grid, self.modo)
         self.max_area_size = 450
         self.cell_size = self.calcular_tamano_celdas()
         window_width, window_height = app.ventana.get_size()
@@ -22,18 +24,21 @@ class Jugar:
         self.creativo = 0
         self.ventana_nonograma_emergente = False
         self.nonograma_completado = False
-        self.fondo_imagen = pygame.image.load("Nonogram/Imagenes/NivelFondo.png")
+        self.fondo_imagen = pygame.image.load(
+            "Imagenes/NivelFondo.png")
         self.fondo_imagen = pygame.transform.scale(
             self.fondo_imagen, (800, 600))
         self.callSave = False
        # grid.printLists()
-        self.use_clue_button = Boton("Usar Pista", (window_width - 150, 30),
-                                     (120, 50), ((0, 0, 0), (255, 255, 255)), self.activar_modo_pista)
-        self.botones.append(self.use_clue_button)
         self.modo_pista_activado = False
+        if modo == GameModeEnum.ZEN:
+            self.use_clue_button = Boton("Usar Pista", (window_width - 150, 30),
+                                         (120, 50), ((0, 0, 0), (255, 255, 255)), self.activar_modo_pista)
+            self.botones.append(self.use_clue_button)
 
     def modo_creativo(self, ln: LectorNiveles, l: list, ls: int):
-        self.fondo_imagen = pygame.image.load("Nonogram/Imagenes/CrearNivelFondo.png")
+        self.fondo_imagen = pygame.image.load(
+            "Imagenes/CrearNivelFondo.png")
         self.fondo_imagen = pygame.transform.scale(
             self.fondo_imagen, (800, 600))
         self.creativo = 1
@@ -95,33 +100,46 @@ class Jugar:
             row = (y - self.start_y) // self.cell_size
 
             if 0 <= row < self.grid.getGridRows() and 0 <= col < self.grid.getGridColumns():
-                if self.modo_pista_activado:
+                try:
+                    if self.modo_pista_activado:
+                        if pygame.mouse.get_pressed()[0]:
+                            self.levelnonograma.useClue(row, col)
+                            self.modo_pista_activado = False
+                            print(f"Pista usada en la celda ({row}, {col})")
+                            self.levelnonograma.getCurrentGrid().printLists()
+                            return
+
                     if pygame.mouse.get_pressed()[0]:
-                        self.levelnonograma.useClue(row, col)
-                        self.modo_pista_activado = False
-                        # print(f"Pista usada en la celda ({row}, {col})")
-                        # self.levelnonograma.getCurrentGrid().printLists()
-                        return
+                        if self.levelnonograma.getCurrentGrid().getCell(row, col).CurrentState() == CellStateEnum.EMPTY:
+                            self.levelnonograma.changeCell(
+                                row, col, CellStateEnum.PAINTED)
+                            print(f"Pista usada en la celda ({row}, {col})")
+                            self.levelnonograma.getCurrentGrid().printLists()
+                        elif self.levelnonograma.getCurrentGrid().getCell(row, col).CurrentState() == CellStateEnum.PAINTED or CellStateEnum.MARKED:
+                            self.levelnonograma.changeCell(
+                                row, col, CellStateEnum.EMPTY)
+                            print(f"Pista usada en la celda ({row}, {col})")
+                            self.levelnonograma.getCurrentGrid().printLists()
+                    elif pygame.mouse.get_pressed()[2]:
+                        if self.levelnonograma.getCurrentGrid().getCell(row, col).CurrentState() == CellStateEnum.EMPTY:
+                            self.levelnonograma.changeCell(
+                                row, col, CellStateEnum.MARKED)
+                            print(f"Pista usada en la celda ({row}, {col})")
+                            self.levelnonograma.getCurrentGrid().printLists()
+                        elif self.levelnonograma.getCurrentGrid().getCell(row, col).CurrentState() == CellStateEnum.MARKED or CellStateEnum.PAINTED:
+                            self.levelnonograma.changeCell(
+                                row, col, CellStateEnum.EMPTY)
+                            print(f"Pista usada en la celda ({row}, {col})")
+                            self.levelnonograma.getCurrentGrid().printLists()
 
-                if pygame.mouse.get_pressed()[0]:
-                    if self.levelnonograma.getCurrentGrid().getCell(row, col).CurrentState() == CellStateEnum.EMPTY:
-                        self.levelnonograma.changeCell(
-                            row, col, CellStateEnum.PAINTED)
-                    elif self.levelnonograma.getCurrentGrid().getCell(row, col).CurrentState() == CellStateEnum.PAINTED or CellStateEnum.MARKED:
-                        self.levelnonograma.changeCell(
-                            row, col, CellStateEnum.EMPTY)
-                elif pygame.mouse.get_pressed()[2]:
-                    if self.levelnonograma.getCurrentGrid().getCell(row, col).CurrentState() == CellStateEnum.EMPTY:
-                        self.levelnonograma.changeCell(
-                            row, col, CellStateEnum.MARKED)
-                    elif self.levelnonograma.getCurrentGrid().getCell(row, col).CurrentState() == CellStateEnum.MARKED or CellStateEnum.PAINTED:
-                        self.levelnonograma.changeCell(
-                            row, col, CellStateEnum.EMPTY)
-
-                if self.levelnonograma.getScore() == (self.grid.getGridRows() * self.grid.getGridColumns()):
-                    if self.creativo == 1:
-                        return
-                    print("¡Felicidades! Has completado el nonograma.")
+                    if self.levelnonograma.getScore() == (self.grid.getGridRows() * self.grid.getGridColumns()):
+                        if self.creativo == 1:
+                            return
+                        print("¡Felicidades! Has completado el nonograma.")
+                        self.ventana_nonograma_emergente = True
+                        self.nonograma_completado = True
+                except NoLivesRemainingException:
+                    print("No quedan vidas.")
                     self.ventana_nonograma_emergente = True
                     self.nonograma_completado = True
 
@@ -134,18 +152,51 @@ class Jugar:
                          ventana_emergente.get_rect(), 2)
 
         font = pygame.font.Font(None, 36)
-        text_surface = font.render("¡Felicidades!", True, (0, 0, 0))
-        text_rect = text_surface.get_rect(center=(ancho_ventana // 2, 50))
-        ventana_emergente.blit(text_surface, text_rect)
+        if self.modo == GameModeEnum.LIVES:
+            if self.levelnonograma.getLives() <= 0:
+                text_surface = font.render("¡Has perdido!", True, (0, 0, 0))
+                text_rect = text_surface.get_rect(
+                    center=(ancho_ventana // 2, 50))
+                ventana_emergente.blit(text_surface, text_rect)
 
-        text_surface = font.render(
-            "Has completado el nonograma.", True, (0, 0, 0))
-        text_rect = text_surface.get_rect(center=(ancho_ventana // 2, 100))
-        ventana_emergente.blit(text_surface, text_rect)
+                text_surface = font.render("No quedan vidas.", True, (0, 0, 0))
+                text_rect = text_surface.get_rect(
+                    center=(ancho_ventana // 2, 100))
+                ventana_emergente.blit(text_surface, text_rect)
 
-        self.ventana.blit(ventana_emergente, (self.ventana.get_width(
-        ) // 2 - ancho_ventana // 2, self.ventana.get_height() // 2 - alto_ventana // 2))
-        pygame.display.flip()
+                self.ventana.blit(ventana_emergente, (self.ventana.get_width(
+                ) // 2 - ancho_ventana // 2, self.ventana.get_height() // 2 - alto_ventana // 2))
+                pygame.display.flip()
+
+            else:
+                text_surface = font.render("¡Felicidades!", True, (0, 0, 0))
+                text_rect = text_surface.get_rect(
+                    center=(ancho_ventana // 2, 50))
+                ventana_emergente.blit(text_surface, text_rect)
+
+                text_surface = font.render(
+                    "Has completado el nonograma.", True, (0, 0, 0))
+                text_rect = text_surface.get_rect(
+                    center=(ancho_ventana // 2, 100))
+                ventana_emergente.blit(text_surface, text_rect)
+                self.ventana.blit(ventana_emergente, (self.ventana.get_width(
+                ) // 2 - ancho_ventana // 2, self.ventana.get_height() // 2 - alto_ventana // 2))
+                pygame.display.flip()
+        else:
+            text_surface = font.render("¡Felicidades!", True, (0, 0, 0))
+            text_rect = text_surface.get_rect(
+                center=(ancho_ventana // 2, 50))
+            ventana_emergente.blit(text_surface, text_rect)
+
+            text_surface = font.render(
+                "Has completado el nonograma.", True, (0, 0, 0))
+            text_rect = text_surface.get_rect(
+                center=(ancho_ventana // 2, 100))
+            ventana_emergente.blit(text_surface, text_rect)
+
+            self.ventana.blit(ventana_emergente, (self.ventana.get_width(
+            ) // 2 - ancho_ventana // 2, self.ventana.get_height() // 2 - alto_ventana // 2))
+            pygame.display.flip()
 
         esperando = True
         while esperando:
@@ -162,12 +213,21 @@ class Jugar:
         font = pygame.font.Font(None, 25)
 
         # Mostrar el contador de pistas
-        pistas_texto = f"Pistas restantes: {
-            self.levelnonograma.getRemainingClues()}"
-        pistas_surface = font.render(pistas_texto, True, (255, 255, 255))
-        pistas_rect = pistas_surface.get_rect()
-        pistas_rect.topleft = (10, 10)
-        ventana.blit(pistas_surface, pistas_rect)
+        if self.modo == GameModeEnum.ZEN:
+            pistas_texto = f"Pistas restantes: {
+                self.levelnonograma.getRemainingClues()}"
+            pistas_surface = font.render(pistas_texto, True, (255, 255, 255))
+            pistas_rect = pistas_surface.get_rect()
+            pistas_rect.topleft = (10, 10)
+            ventana.blit(pistas_surface, pistas_rect)
+
+        # Mostrar el número de vidas restantes en el modo LIVES
+        if self.levelnonograma.getGameMode() == GameModeEnum.LIVES:
+            vidas_texto = f"Vidas restantes: {self.levelnonograma.getLives()}"
+            vidas_surface = font.render(vidas_texto, True, (255, 255, 255))
+            vidas_rect = vidas_surface.get_rect()
+            vidas_rect.topleft = (10, 40)
+            ventana.blit(vidas_surface, vidas_rect)
 
         for row_idx, row in enumerate(self.grid.getRowsList()):
             for num_idx, num in enumerate(row):
