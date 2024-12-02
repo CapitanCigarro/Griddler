@@ -11,7 +11,7 @@ from ..Logic.NoCluesRemainingException import NoCluesRemainingException
 
 
 class Jugar:
-    def __init__(self, app, grid: Grid, modo=GameModeEnum.ZEN):
+    def __init__(self, app, grid: Grid, modo:GameModeEnum):
         self.app = app
         self.grid = grid
         self.modo = modo
@@ -35,6 +35,7 @@ class Jugar:
         if modo == GameModeEnum.ZEN:
             self.use_clue_button = Boton("Usar Pista", (window_width - 150, 30),
                                          (120, 50), ((0, 0, 0), (255, 255, 255)), self.activar_modo_pista)
+            self.use_clue_button.changefontsize(30)
             self.botones.append(self.use_clue_button)
 
     def modo_creativo(self, ln: LectorNiveles, l: list, ls: int):

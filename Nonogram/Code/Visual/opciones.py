@@ -41,6 +41,7 @@ class Opciones(Panel):
             Boton("Pantalla completa", (10, 200), (350, 50), ((0, 0, 0), (255, 255, 255)),
                   lambda: self.pantallaCompleta())      
         ]
+        self.botones[3].changefontsize(30)
 
         # Fondo
         self.fondo_imagen = pygame.image.load("Imagenes/Opcion fondo.png")
