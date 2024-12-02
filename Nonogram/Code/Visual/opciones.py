@@ -48,8 +48,7 @@ class Opciones(Panel):
 
         resolucion_actual = self.resoluciones[self.resolucion_selector.getvalor(
         )]
-        texto_resolucion = self.fuente.render(f"Resolución: {resolucion_actual[0]} x {
-                                              resolucion_actual[1]}", True, (255, 255, 255))
+        texto_resolucion = self.fuente.render(f"Resolución: {resolucion_actual[0]} x {resolucion_actual[1]}", True, (255, 255, 255))
         ventana.blit(texto_resolucion, (20, 150))
         self.resolucion_selector.dibujar(ventana)
 

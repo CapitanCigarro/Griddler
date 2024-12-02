@@ -25,9 +25,14 @@ class Aplicacion:
         self.opciones = Opciones(self,self.ventana)
         self.tutorial = Tutorial(self)
         self.panel_actual = self.menu
+        self.panel_anterior = self.menu
 
     def cambiar_panel(self, nuevo_panel):
+        self.panel_anterior = self.panel_actual
         self.panel_actual = nuevo_panel
+
+        if nuevo_panel == self.elegirTamaño:
+            self.panel_actual.__init__(self)
 
     def ejecutar(self):
         while True:

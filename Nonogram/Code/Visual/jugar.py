@@ -10,7 +10,7 @@ from ..Logic.NoLivesRemainigException import NoLivesRemainingException
 
 
 class Jugar:
-    def __init__(self, app, grid: Grid, modo=GameModeEnum.LIVES):
+    def __init__(self, app, grid: Grid, modo:GameModeEnum):
         self.app = app
         self.grid = grid
         self.modo = modo
@@ -34,6 +34,7 @@ class Jugar:
         if modo == GameModeEnum.ZEN:
             self.use_clue_button = Boton("Usar Pista", (window_width - 150, 30),
                                          (120, 50), ((0, 0, 0), (255, 255, 255)), self.activar_modo_pista)
+            self.use_clue_button.changefontsize(30)
             self.botones.append(self.use_clue_button)
 
     def modo_creativo(self, ln: LectorNiveles, l: list, ls: int):
@@ -214,8 +215,7 @@ class Jugar:
 
         # Mostrar el contador de pistas
         if self.modo == GameModeEnum.ZEN:
-            pistas_texto = f"Pistas restantes: {
-                self.levelnonograma.getRemainingClues()}"
+            pistas_texto = f"Pistas restantes: {self.levelnonograma.getRemainingClues()}"
             pistas_surface = font.render(pistas_texto, True, (255, 255, 255))
             pistas_rect = pistas_surface.get_rect()
             pistas_rect.topleft = (10, 10)
