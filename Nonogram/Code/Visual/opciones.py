@@ -26,7 +26,6 @@ class Opciones(Panel):
         if evento.type == pygame.KEYDOWN:
             if evento.key == pygame.K_ESCAPE: 
                 self.app.cambiar_panel(self.app.menu)
-        # Llama a los eventos de los botones
         for boton in self.botones:
             boton.manejar_evento(evento)
 
