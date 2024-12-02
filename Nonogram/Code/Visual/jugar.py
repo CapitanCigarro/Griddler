@@ -7,6 +7,7 @@ from ..Logic.Level import Level
 from ..Logic.LectorNiveles import LectorNiveles
 from ..Logic.GameModeEnum import GameModeEnum
 from ..Logic.NoLivesRemainigException import NoLivesRemainingException
+from ..Logic.NoCluesRemainingException import NoCluesRemainingException
 
 
 class Jugar:
@@ -114,23 +115,23 @@ class Jugar:
                         if self.levelnonograma.getCurrentGrid().getCell(row, col).CurrentState() == CellStateEnum.EMPTY:
                             self.levelnonograma.changeCell(
                                 row, col, CellStateEnum.PAINTED)
-                            print(f"Pista usada en la celda ({row}, {col})")
+
                             self.levelnonograma.getCurrentGrid().printLists()
-                        elif self.levelnonograma.getCurrentGrid().getCell(row, col).CurrentState() == CellStateEnum.PAINTED or CellStateEnum.MARKED:
+                        elif (self.levelnonograma.getCurrentGrid().getCell(row, col).CurrentState() == CellStateEnum.PAINTED or CellStateEnum.MARKED) and self.levelnonograma.getGameMode() == GameModeEnum.ZEN:
                             self.levelnonograma.changeCell(
                                 row, col, CellStateEnum.EMPTY)
-                            print(f"Pista usada en la celda ({row}, {col})")
+
                             self.levelnonograma.getCurrentGrid().printLists()
                     elif pygame.mouse.get_pressed()[2]:
                         if self.levelnonograma.getCurrentGrid().getCell(row, col).CurrentState() == CellStateEnum.EMPTY:
                             self.levelnonograma.changeCell(
                                 row, col, CellStateEnum.MARKED)
-                            print(f"Pista usada en la celda ({row}, {col})")
+
                             self.levelnonograma.getCurrentGrid().printLists()
-                        elif self.levelnonograma.getCurrentGrid().getCell(row, col).CurrentState() == CellStateEnum.MARKED or CellStateEnum.PAINTED:
+                        elif (self.levelnonograma.getCurrentGrid().getCell(row, col).CurrentState() == CellStateEnum.MARKED or CellStateEnum.PAINTED) and self.levelnonograma.getGameMode() == GameModeEnum.ZEN:
                             self.levelnonograma.changeCell(
                                 row, col, CellStateEnum.EMPTY)
-                            print(f"Pista usada en la celda ({row}, {col})")
+
                             self.levelnonograma.getCurrentGrid().printLists()
 
                     if self.levelnonograma.getScore() == (self.grid.getGridRows() * self.grid.getGridColumns()):
@@ -143,6 +144,10 @@ class Jugar:
                     print("No quedan vidas.")
                     self.ventana_nonograma_emergente = True
                     self.nonograma_completado = True
+
+                except NoCluesRemainingException:
+                    self.modo_pista_activado = False
+                    self.ventana_nonograma_emergente = True
 
     def mostrar_ventana_emergente(self):
         ancho_ventana = 600
@@ -183,7 +188,7 @@ class Jugar:
                 self.ventana.blit(ventana_emergente, (self.ventana.get_width(
                 ) // 2 - ancho_ventana // 2, self.ventana.get_height() // 2 - alto_ventana // 2))
                 pygame.display.flip()
-        else:
+        elif self.nonograma_completado:
             text_surface = font.render("¡Felicidades!", True, (0, 0, 0))
             text_rect = text_surface.get_rect(
                 center=(ancho_ventana // 2, 50))
@@ -193,6 +198,16 @@ class Jugar:
                 "Has completado el nonograma.", True, (0, 0, 0))
             text_rect = text_surface.get_rect(
                 center=(ancho_ventana // 2, 100))
+            ventana_emergente.blit(text_surface, text_rect)
+
+            self.ventana.blit(ventana_emergente, (self.ventana.get_width(
+            ) // 2 - ancho_ventana // 2, self.ventana.get_height() // 2 - alto_ventana // 2))
+            pygame.display.flip()
+        elif self.levelnonograma.getRemainingClues() == 0:
+            text_surface = font.render(
+                "No hay más pistas para usar.", True, (0, 0, 0))
+            text_rect = text_surface.get_rect(
+                center=(ancho_ventana // 2, 50))
             ventana_emergente.blit(text_surface, text_rect)
 
             self.ventana.blit(ventana_emergente, (self.ventana.get_width(
