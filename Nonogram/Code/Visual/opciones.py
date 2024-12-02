@@ -38,6 +38,7 @@ class Opciones(Panel):
             Boton("Activar/Desactivar Musica", (400, 500), (350, 50), ((0, 0, 0), (255, 255, 255)),
                   self.pausarMusica)
         ]
+        self.botones[3].changefontsize(30)
 
         # Fondo
         self.fondo_imagen = pygame.image.load("Imagenes/Opcion fondo.png")
