@@ -22,7 +22,7 @@ class Jugar:
         self.creativo = 0
         self.ventana_nonograma_emergente = False
         self.nonograma_completado = False
-        self.fondo_imagen = pygame.image.load("Imagenes/NivelFondo.png")
+        self.fondo_imagen = pygame.image.load("Nonogram/Imagenes/NivelFondo.png")
         self.fondo_imagen = pygame.transform.scale(
             self.fondo_imagen, (800, 600))
         self.callSave = False
@@ -33,7 +33,7 @@ class Jugar:
         self.modo_pista_activado = False
 
     def modo_creativo(self, ln: LectorNiveles, l: list, ls: int):
-        self.fondo_imagen = pygame.image.load("Imagenes/CrearNivelFondo.png")
+        self.fondo_imagen = pygame.image.load("Nonogram/Imagenes/CrearNivelFondo.png")
         self.fondo_imagen = pygame.transform.scale(
             self.fondo_imagen, (800, 600))
         self.creativo = 1
