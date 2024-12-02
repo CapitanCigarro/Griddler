@@ -44,7 +44,7 @@ class ChooseNonogram(Panel):
         emptyList = []
         for i in range(grid):
             emptyList.append([0]*grid)
-        emptyNonogram = Jugar(self.app, Grid(emptyList),mode)
+        emptyNonogram = Jugar(self.app, Grid(emptyList),GameModeEnum.CREATIVO)
         emptyNonogram.modo_creativo(
             nonogram.getlectornivel(grid), emptyList, grid)
         width, height = app.ventana.get_size()

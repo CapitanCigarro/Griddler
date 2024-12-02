@@ -31,8 +31,6 @@ class elegirTamaño(Panel):
         self.botones_mode = [
             Boton("ZEN", (300, 350), (200, 50),
                   ((0, 0, 0), (255, 255, 255)), self.choose_modeZEN),
-            Boton("TIEMPO", (300, 450), (200, 50),
-                  ((0, 0, 0), (255, 255, 255)), self.choose_modeTIME),
             Boton("VIDAS", (300, 550), (200, 50),
                   ((0, 0, 0), (255, 255, 255)), self.choose_modeVIDA)
         ]
@@ -47,9 +45,6 @@ class elegirTamaño(Panel):
 
     def choose_modeVIDA(self):
         self.game_mode = GameModeEnum.LIVES
-        self.botones = self.botones_tam
-    def choose_modeTIME(self):
-        self.game_mode = GameModeEnum.TIME
         self.botones = self.botones_tam
     def choose_modeZEN(self):
         self.game_mode = GameModeEnum.ZEN
