@@ -8,7 +8,7 @@ class Menu(Panel):
     def __init__(self, app):
         super().__init__()
         self.app = app
-        window_width, window_height = app.ventana.get_size()
+        window_width = app.ventana.get_size()
         self.botones = [
             Boton("Jugar", (window_width//2 - 100, 350), (200, 55),
                   ((0, 0, 0), (255, 255, 255)), self.ir_a_elegirTamaño),
