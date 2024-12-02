@@ -8,6 +8,7 @@ class Opciones(Panel):
         super().__init__()
         self.ventana = ventana
         self.app = app
+        self.pantallacom=True
         pygame.font.init()
         self.fuente = pygame.font.Font(None, 74)
         self.musicaOn = True
@@ -36,12 +37,23 @@ class Opciones(Panel):
             Boton("Lofi", (400, 400), (350, 50), ((0, 0, 0), (255, 255, 255)),
                   lambda: self.cambiarMusica(self.canciones[2])),
             Boton("Activar/Desactivar Musica", (400, 500), (350, 50), ((0, 0, 0), (255, 255, 255)),
-                  self.pausarMusica)
+                  self.pausarMusica),
+            Boton("Pantalla completa", (10, 200), (350, 50), ((0, 0, 0), (255, 255, 255)),
+                  lambda: self.pantallaCompleta())      
         ]
 
         # Fondo
         self.fondo_imagen = pygame.image.load("Imagenes/Opcion fondo.png")
         self.fondo_imagen = pygame.transform.scale(self.fondo_imagen, (800, 600))
+
+    def pantallaCompleta(self):
+        if self.pantallacom:
+            pygame.display.set_mode((800, 600), pygame.FULLSCREEN)
+            self.pantallacom=False
+        else:
+            self.ventana = pygame.display.set_mode((800, 600))
+            self.pantallacom=True
+
 
     def cambiarMusica(self, musica):
         pygame.mixer.music.load(musica)
