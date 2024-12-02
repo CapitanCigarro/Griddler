@@ -15,7 +15,7 @@ class Tutorial(Panel):
                   ((0, 0, 0), (255, 255, 255)), self.ir_a_tutorial1)
         ]
         self.fondo_imagen = pygame.image.load(
-            "Nonogram/Imagenes/Tutorial_fondo.png")
+            "Imagenes/Tutorial_fondo.png")
         self.fondo_imagen = pygame.transform.scale(
             self.fondo_imagen, (800, 600))
 
@@ -54,8 +54,8 @@ class Tutorial(Panel):
         ventana.blit(self.fuente_tutorial.render(
             texto, True, (255, 255, 255)), (10, 95))
 
-        self.imagen1 = pygame.image.load("Nonogram/Imagenes/Tutorial1.png")
-        self.imagen2 = pygame.image.load("Nonogram/Imagenes/Tutorial2.png")
+        self.imagen1 = pygame.image.load("Imagenes/Tutorial1.png")
+        self.imagen2 = pygame.image.load("Imagenes/Tutorial2.png")
 
         self.fondo_imagen1 = pygame.transform.scale(self.imagen1, (380, 285))
         self.fondo_imagen2 = pygame.transform.scale(self.imagen2, (380, 285))
