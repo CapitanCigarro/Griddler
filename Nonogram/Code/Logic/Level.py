@@ -26,13 +26,15 @@ class Level:
 
     def changeCell(self, i : int, j : int, state : CellStateEnum) -> None:
         if self.__gameMode == GameModeEnum.LIVES:
-            if self.__currentGrid.getCell(i, j).isSolved():
-                pass
-            elif state == self.__currentGrid.getCell(i, j).getExpectedState():
+            if state == self.__currentGrid.getCell(i, j).getExpectedState():
                 self.__score += self.__currentGrid.getCell(i, j).setCurrentState(state)
             else:
-                self.__lives =- 1
-                self.__score += self.__currentGrid.getCell(i, j).setCurrentState(self.__currentGrid.getCell(i, j).getExpectedState())
+                self.__lives -= 1
+                print(self.__lives)
+                if self.__currentGrid.getCell(i, j).getExpectedState() == CellStateEnum.PAINTED:
+                    self.__score += self.__currentGrid.getCell(i, j).setCurrentState(CellStateEnum.PAINTED)
+                else:
+                    self.__score += self.__currentGrid.getCell(i, j).setCurrentState(CellStateEnum.MARKED)
         else:
             self.__score += self.__currentGrid.getCell(i, j).setCurrentState(state)
 
@@ -56,3 +58,5 @@ class Level:
         return self.__remainingClues
     def getCurrentGrid(self) -> Grid:
         return self.__currentGrid
+    def getLives(self) -> int:
+        return self.__lives
