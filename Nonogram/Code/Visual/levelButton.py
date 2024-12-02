@@ -25,7 +25,7 @@ class LevelButton:
         else:
             imagoffset = 0
         self.rect = pygame.Rect((x+imagoffset, y+imagoffset), (size))
-        self.text = pygame.font.Font(None, 74)
+        self.text = pygame.font.Font(None, 54)
         self.fondo_imagen = pygame.image.load("Imagenes/BotonNiveles.png")
         self.fondo_imagen = pygame.transform.scale(
             self.fondo_imagen, (100, 100))

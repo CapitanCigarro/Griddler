@@ -11,7 +11,7 @@ from ..Logic.NoCluesRemainingException import NoCluesRemainingException
 
 
 class Jugar:
-    def __init__(self, app, grid: Grid, modo=GameModeEnum.ZEN):
+    def __init__(self, app, grid: Grid, modo:GameModeEnum):
         self.app = app
         self.grid = grid
         self.modo = modo
@@ -22,7 +22,6 @@ class Jugar:
         self.start_x = window_width // 2 - self.max_area_size // 2
         self.start_y = window_height - self.max_area_size-30
         self.botones = []
-        self.creativo = 0
         self.ventana_nonograma_emergente = False
         self.nonograma_completado = False
         self.fondo_imagen = pygame.image.load(
@@ -35,14 +34,15 @@ class Jugar:
         if modo == GameModeEnum.ZEN:
             self.use_clue_button = Boton("Usar Pista", (window_width - 150, 30),
                                          (120, 50), ((0, 0, 0), (255, 255, 255)), self.activar_modo_pista)
+            self.use_clue_button.changefontsize(30)
             self.botones.append(self.use_clue_button)
 
     def modo_creativo(self, ln: LectorNiveles, l: list, ls: int):
+        self.modo = GameModeEnum.CREATIVO
         self.fondo_imagen = pygame.image.load(
             "Imagenes/CrearNivelFondo.png")
         self.fondo_imagen = pygame.transform.scale(
             self.fondo_imagen, (800, 600))
-        self.creativo = 1
         self.actualLector = ln
         width, height = self.app.ventana.get_size()
         self.saveButton = Boton("Guardar e ir al menu", (width/2-145, 30),
@@ -88,7 +88,7 @@ class Jugar:
                 boton.manejar_evento(evento)
             pos = pygame.mouse.get_pos()
             self.manejar_clic(pos)
-        if self.creativo == 1:
+        if self.modo == GameModeEnum.CREATIVO:
             self.saveButton.manejar_evento(evento)
 
     def activar_modo_pista(self):
@@ -116,7 +116,7 @@ class Jugar:
                                 row, col, CellStateEnum.PAINTED)
 
                             self.levelnonograma.getCurrentGrid().printLists()
-                        elif self.levelnonograma.getCurrentGrid().getCell(row, col).CurrentState() == CellStateEnum.PAINTED or CellStateEnum.MARKED:
+                        elif (self.levelnonograma.getCurrentGrid().getCell(row, col).CurrentState() == CellStateEnum.PAINTED or CellStateEnum.MARKED) and self.levelnonograma.getGameMode() != GameModeEnum.LIVES:
                             self.levelnonograma.changeCell(
                                 row, col, CellStateEnum.EMPTY)
 
@@ -127,14 +127,14 @@ class Jugar:
                                 row, col, CellStateEnum.MARKED)
 
                             self.levelnonograma.getCurrentGrid().printLists()
-                        elif self.levelnonograma.getCurrentGrid().getCell(row, col).CurrentState() == CellStateEnum.MARKED or CellStateEnum.PAINTED:
+                        elif (self.levelnonograma.getCurrentGrid().getCell(row, col).CurrentState() == CellStateEnum.MARKED or CellStateEnum.PAINTED) and self.levelnonograma.getGameMode() == GameModeEnum.ZEN:
                             self.levelnonograma.changeCell(
                                 row, col, CellStateEnum.EMPTY)
 
                             self.levelnonograma.getCurrentGrid().printLists()
 
                     if self.levelnonograma.getScore() == (self.grid.getGridRows() * self.grid.getGridColumns()):
-                        if self.creativo == 1:
+                        if self.modo == GameModeEnum.CREATIVO:
                             return
                         print("¡Felicidades! Has completado el nonograma.")
                         self.ventana_nonograma_emergente = True
@@ -229,8 +229,7 @@ class Jugar:
 
         # Mostrar el contador de pistas
         if self.modo == GameModeEnum.ZEN:
-            pistas_texto = f"Pistas restantes: {
-                self.levelnonograma.getRemainingClues()}"
+            pistas_texto = f"Pistas restantes: {self.levelnonograma.getRemainingClues()}"
             pistas_surface = font.render(pistas_texto, True, (255, 255, 255))
             pistas_rect = pistas_surface.get_rect()
             pistas_rect.topleft = (10, 10)

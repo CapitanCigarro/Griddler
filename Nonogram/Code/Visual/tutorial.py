@@ -11,8 +11,8 @@ class Tutorial(Panel):
         self.fuente = pygame.font.Font(None, 74)
         window_width, window_height = app.ventana.get_size()
         self.botones = [
-            Boton("SIGUIENTE", (440, 540), (350, 50),
-                  ((0, 0, 0), (255, 255, 255)), self.ir_a_tutorial1)
+            Boton("SIGUIENTE", (440, 540), (350, 50),((0, 0, 0), (255, 255, 255)), self.ir_a_tutorial1),
+            Boton("RETROCEDER", (10, 540), (350, 50),((0, 0, 0), (255, 255, 255)), self.retroceder)
         ]
         self.fondo_imagen = pygame.image.load(
             "Imagenes/Tutorial_fondo.png")
@@ -25,6 +25,8 @@ class Tutorial(Panel):
                 self.app.cambiar_panel(self.app.menu)
         for boton in self.botones:
             boton.manejar_evento(evento)
+    def retroceder(self):
+        self.app.cambiar_panel(self.app.menu)
 
     def ir_a_tutorial1(self):
         self.app.cambiar_panel(self.app.tutorial1)
@@ -60,15 +62,13 @@ class Tutorial(Panel):
         self.fondo_imagen1 = pygame.transform.scale(self.imagen1, (380, 285))
         self.fondo_imagen2 = pygame.transform.scale(self.imagen2, (380, 285))
 
-        ventana.blit(self.fondo_imagen1, (10, 200))
-        ventana.blit(self.fondo_imagen2, (410, 200))
+        ventana.blit(self.fondo_imagen1,(10,200))
+        ventana.blit(self.fondo_imagen2,(410,200))
 
-        texto = "Rellenas primero los de 5 ya que es el tamaño maximo"
-        ventana.blit(self.fuente_tutorial.render(
-            texto, True, (255, 255, 255)), (10, 200))
-        texto = "a"
-        ventana.blit(self.fuente_tutorial.render(
-            texto, True, (255, 255, 255)), (410, 200))
+        texto= "Rellenas primero los de 5 ya que es el tamaño maximo"
+        ventana.blit(self.fuente_tutorial.render(texto,True,(255, 255, 255)), (10, 170))
+        texto= "Rellenas los 3 bloques continuos que se señala arriba"
+        ventana.blit(self.fuente_tutorial.render(texto,True,(255, 255, 255)), (410, 170))
 
         for boton in self.botones:
             boton.dibujar(ventana)
