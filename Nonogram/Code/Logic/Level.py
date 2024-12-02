@@ -28,7 +28,7 @@ class Level:
 
     def changeCell(self, i: int, j: int, state: CellStateEnum) -> None:
         if self.__gameMode == GameModeEnum.LIVES:
-            if state == self.__currentGrid.getCell(i, j).getExpectedState():
+            if state == CellStateEnum.PAINTED and state == self.__currentGrid.getCell(i, j).getExpectedState() or state == CellStateEnum.MARKED and CellStateEnum.EMPTY == self.__currentGrid.getCell(i, j).getExpectedState():
                 self.__score += self.__currentGrid.getCell(
                     i, j).setCurrentState(state)
             else:
